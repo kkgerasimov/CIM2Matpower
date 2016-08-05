@@ -1,0 +1,151 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Sturcture and Dependencies &mdash; CIM2Matpower 160513 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '160513',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="CIM2Matpower 160513 documentation" href="index.html" />
+    <link rel="next" title="Algorithm" href="Algorithm.html" />
+    <link rel="prev" title="Introduction" href="Introduction.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="Algorithm.html" title="Algorithm"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Introduction.html" title="Introduction"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">CIM2Matpower 160513 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="sturcture-and-dependencies">
+<h1>Sturcture and Dependencies<a class="headerlink" href="#sturcture-and-dependencies" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Date:</th><td class="field-body">2016-05-10</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Authors:</th><td class="field-body">Konstantin Gerasimov</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">e-mail:</th><td class="field-body"><a class="reference external" href="mailto:kkgerasimov&#37;&#52;&#48;gmail&#46;com">kkgerasimov<span>&#64;</span>gmail<span>&#46;</span>com</a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Credits:</th><td class="field-body">Created for KU-Leuven as part of the GARPUR project <a class="reference external" href="http://www.garpur-project.eu">http://www.garpur-project.eu</a></td>
+</tr>
+</tbody>
+</table>
+<p>The tool for import of CIM transmission system network models is created for KU-Leuven as part of the GARPUR project <a class="reference external" href="http://www.garpur-project.eu">http://www.garpur-project.eu</a></p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">The current implementation of the tool works for CIMv14 IEC61970 and is fine tuned for the RTE CIM export tool!</p>
+</div>
+<p>It consists of:
+* Python packages:</p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal"><span class="pre">PyCIM</span></code> - open source Python implementation of the IEC Common Information Model <a class="reference external" href="https://pypi.python.org/pypi/PyCIM/15.13.4">https://pypi.python.org/pypi/PyCIM/15.13.4</a></li>
+</ul>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">The current implementation of the tool has modified 2 files from the original PyCIM package: <code class="docutils literal"><span class="pre">PyCIM\RDFXMLReader.py</span></code> (because of a bug in the reading of boolean values and some minor adjustments in the logging) and the <code class="docutils literal"><span class="pre">CIM14\IEC61970\Topology\TopologicalNode.py</span></code> (in order to add the <code class="docutils literal"><span class="pre">ControlArea</span></code> attribute which is present in the RTE CIM export tool but not in the CIMv14 IEC61970 standard)!</p>
+</div>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">CIM2Matpower</span></code> - a package specially developed for the GARPUR project</li>
+</ul>
+</div></blockquote>
+<ul class="simple">
+<li>Matlab file: <em>cim_read()</em>, <em>cim_bb2nodal()</em> and <em>cim_nodal2bb()</em></li>
+</ul>
+<p>The tool is intended to be used by the Matlab function <em>cim_read()</em> (however it is only mainly a Matlab interface to the Python packages). The transofmrations between BusBranch to NodeBreaker topology models and vice versa (for example necessary in order to perform switching actions) is done only in Matlab by the functions <em>cim_bb2nodal()</em> and <em>cim_nodal2bb()</em>.</p>
+<p>The package main structure and dependencies are shown in the figure below. In green are the Python pakcages and in red - the Matlab. The dashed arrows represent the dependencies between the packages.</p>
+<img alt="_images/Package_Structure_and_Dependency.png" src="_images/Package_Structure_and_Dependency.png" />
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="Introduction.html"
+                        title="previous chapter">Introduction</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="Algorithm.html"
+                        title="next chapter">Algorithm</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/Dependencies.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="Algorithm.html" title="Algorithm"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Introduction.html" title="Introduction"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">CIM2Matpower 160513 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, Konstantin Gerasimov.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,289 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Matlab files &mdash; CIM2Matpower 160513 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '160513',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="CIM2Matpower 160513 documentation" href="index.html" />
+    <link rel="prev" title="PostProcess_mpc module" href="PostProcess_mpc.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="PostProcess_mpc.html" title="PostProcess_mpc module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">CIM2Matpower 160513 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="matlab-files">
+<h1>Matlab files<a class="headerlink" href="#matlab-files" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="tsm-fileformats-cim-read">
+<h2>+tsm.+fileformats.cim_read()<a class="headerlink" href="#tsm-fileformats-cim-read" title="Permalink to this headline">¶</a></h2>
+<p>CIM_READ Reads CIM (Common Information Model, IEC 61970) XML files and creates a Matpower case (mpc) case file as BusBreaker model, but also containing information about the NodeBreaker topology.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Date:</th><td class="field-body">2016-05-10</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Authors:</th><td class="field-body">Konstantin Gerasimov</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">e-mail:</th><td class="field-body"><a class="reference external" href="mailto:kkgerasimov&#37;&#52;&#48;gmail&#46;com">kkgerasimov<span>&#64;</span>gmail<span>&#46;</span>com</a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Credits:</th><td class="field-body">This function is created for KU-Leuven as part of the GARPUR project <a class="reference external" href="http://www.garpur-project.eu">http://www.garpur-project.eu</a></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Currently only CIMv14 is supported!</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">The CIM files and the boundary profiles must not contain
+Unicode characters because then the PyCIM parser fails.</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Despite what the Matlab documentation says, if you change the Python source code files, you must restart Matlab!</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The import is implemented through the specially developed for the
+GARPUR project Python package CIM2Matpower which utilizes the open
+source PyCIM Python package for parsing CIM files.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The created in the frames of the GARPUR project software
+quantification platform prototype is tested with CIM data provided
+by the French TSO RTE. Their files have some peculiarities which
+differ from the CIMv14 standard. In order to cope with that, some
+changes are made directly to the original RTE CIM files by calling
+explicitly the Python function &#8220;fix_RTE_cim_files&#8221;, specially
+developed for this purpose. However, if the &#8220;fix_RTE_cim_files&#8221;
+function is called on regular CIMv14 files, it will not change them.
+Irrelevant of whether changes are made or not to the original CIM
+files, &#8220;fix_RTE_cim_files&#8221; always leaves XML comments at the end of
+the file.</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param cim_files:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body">cell array of stings (usually they come in three files: _EQ, _TP and _SV) of the filenames of the CIM files to be imported (preferably with full path).</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If &#8220;cim_read&#8221; is called with no arguments or if &#8220;cim_files&#8221; is
+set to empty string, then a dialogue will open to select
+interactively the CIM files. If user hits Cancel, then &#8220;cim_read&#8221;
+is terminated and an empty matrix is returned.</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param boundary_profiles:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body">cell array of stings (usually they come in two files: _EQ and _TP) of the filenames of the CIM boundary profiles (preferably with full path).</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If &#8220;cim_read&#8221; is called with 1 or 0 arguments, a dialogue will
+open to select the CIM boundary profiles interactively.
+If &#8220;boundary_profiles&#8221; is set to empty matrix [] or empty
+string &#8216;&#8217; or if user hits Cancel on the interactive file
+selection, then NO boundary profiles are parsed.</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param log_filename:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body">string of the filename (preferably with full
+path) of the log file, which will contain information from the
+Python code about the CIM import.</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If &#8220;cim_read&#8221; is called with 2 or less arguments, a dialogue
+will open to select the log file name interactively.
+If &#8220;log_filename&#8221; is set to empty matrix [] or empty string &#8216;&#8217;
+or if user hits Cancel on the interactive file selection,
+then NO log file will be saved.</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">return mpc_bb:</th><td class="field-body">a Matpower case struct (mpc) which is a BusBreaker model,
+containing also a field NodeBreaker_topology which preserves
+the information from the CIM that cannot be imported in the
+standard mpc structure but is relevant for the creation of
+NodeBreaker model.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="tsm-fileformats-cim-bb2nodal">
+<h2>+tsm.+fileformats.cim_bb2nodal()<a class="headerlink" href="#tsm-fileformats-cim-bb2nodal" title="Permalink to this headline">¶</a></h2>
+<p>MPC_BB2NODAL Transforms the Matpower case (mpc) file from BusBreaker to NodeBranch topology (based on the data from the original CIM files).</p>
+<p>The NodeBreaker topology means that switches and breakers are
+represented as low-impedence branches. This model is used for
+optimization of switching actions (in the GARPUR project this is
+implemented in AMPL). However, sometimes the low-impedences might
+cause the admittance matrix of the mpc to be ill conditioned and
+thus the AC powerflow will not converge or will give wrong results.
+In order to cope with this problem, MPC_NODAL2BB function can be
+used to translate back the NodeBreaker to BusBranch model.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Date:</th><td class="field-body">2016-05-10</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Authors:</th><td class="field-body">Konstantin Gerasimov</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">e-mail:</th><td class="field-body"><a class="reference external" href="mailto:kkgerasimov&#37;&#52;&#48;gmail&#46;com">kkgerasimov<span>&#64;</span>gmail<span>&#46;</span>com</a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Credits:</th><td class="field-body">This function is created for KU-Leuven as part of the GARPUR project <a class="reference external" href="http://www.garpur-project.eu">http://www.garpur-project.eu</a></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">param mpc_bb:</th><td class="field-body">mpc which is a BusBranch model.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">return mpc_nodal:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body">mpc which is a NodeBranch model.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="tsm-fileformats-cim-nodal2bb">
+<h2>+tsm.+fileformats.cim_nodal2bb()<a class="headerlink" href="#tsm-fileformats-cim-nodal2bb" title="Permalink to this headline">¶</a></h2>
+<p>MPC_NODAL2BB Transforms the Matpower case (mpc) file from NodeBreaker to BusBranch topology (based on the data from the original CIM files).</p>
+<p>The NodeBreaker topology means that switches and breakers are
+represented as low-impedence branches. This model is used for
+optimization of switching actions (in the GARPUR project this is
+implemented in AMPL). However, sometimes the low-impedences might
+cause the admittance matrix of the mpc to be ill conditioned and
+thus the AC powerflow will not converge or will give wrong results.
+In order to cope with this problem, this function can be used to
+translate back the NodeBreaker to BusBranch model.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Date:</th><td class="field-body">2016-05-10</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Authors:</th><td class="field-body">Konstantin Gerasimov</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">e-mail:</th><td class="field-body"><a class="reference external" href="mailto:kkgerasimov&#37;&#52;&#48;gmail&#46;com">kkgerasimov<span>&#64;</span>gmail<span>&#46;</span>com</a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Credits:</th><td class="field-body">This function is created for KU-Leuven as part of the GARPUR project <a class="reference external" href="http://www.garpur-project.eu">http://www.garpur-project.eu</a></td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">param mpc_nodal_ORIGINAL:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body">mpc which is a NodeBreaker model.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">return mpc_bb:</th><td class="field-body">mpc which is a BusBranch model.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Matlab files</a><ul>
+<li><a class="reference internal" href="#tsm-fileformats-cim-read">+tsm.+fileformats.cim_read()</a></li>
+<li><a class="reference internal" href="#tsm-fileformats-cim-bb2nodal">+tsm.+fileformats.cim_bb2nodal()</a></li>
+<li><a class="reference internal" href="#tsm-fileformats-cim-nodal2bb">+tsm.+fileformats.cim_nodal2bb()</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="PostProcess_mpc.html"
+                        title="previous chapter">PostProcess_mpc module</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/matlab_files.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="PostProcess_mpc.html" title="PostProcess_mpc module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">CIM2Matpower 160513 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, Konstantin Gerasimov.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
+    </div>
+  </body>
+</html>

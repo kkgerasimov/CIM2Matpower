@@ -1,0 +1,589 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Topology_BusBranch module &mdash; CIM2Matpower 160513 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '160513',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="CIM2Matpower 160513 documentation" href="index.html" />
+    <link rel="up" title="Source code documentation" href="source_code_doc.html" />
+    <link rel="next" title="Topology_NodeBreaker module" href="Topology_NodeBreaker.html" />
+    <link rel="prev" title="PreProcess_CIM_files module" href="PreProcess_CIM_files.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Topology_NodeBreaker.html" title="Topology_NodeBreaker module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="PreProcess_CIM_files.html" title="PreProcess_CIM_files module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">CIM2Matpower 160513 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="source_code_doc.html" accesskey="U">Source code documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-Topology_BusBranch">
+<span id="topology-busbranch-module"></span><h1>Topology_BusBranch module<a class="headerlink" href="#module-Topology_BusBranch" title="Permalink to this headline">¶</a></h1>
+<p>This module contains definitions of classes to represent an object oriented structure of a Matpower case file.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="Topology_NodeBreaker.html#module-Topology_NodeBreaker" title="Topology_NodeBreaker"><code class="xref py py-mod docutils literal"><span class="pre">Topology_NodeBreaker</span></code></a> and <a class="reference internal" href="CIM2Matpower.html#module-CIM2Matpower" title="CIM2Matpower"><code class="xref py py-mod docutils literal"><span class="pre">CIM2Matpower</span></code></a></p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Date:</th><td class="field-body">2016-05-10</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Authors:</th><td class="field-body">Konstantin Gerasimov</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">e-mail:</th><td class="field-body"><a class="reference external" href="mailto:kkgerasimov&#37;&#52;&#48;gmail&#46;com">kkgerasimov<span>&#64;</span>gmail<span>&#46;</span>com</a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Credits:</th><td class="field-body">This function is created for KU-Leuven as part of the GARPUR project <a class="reference external" href="http://www.garpur-project.eu">http://www.garpur-project.eu</a></td>
+</tr>
+</tbody>
+</table>
+<dl class="class">
+<dt id="Topology_BusBranch.Branch">
+<em class="property">class </em><code class="descclassname">Topology_BusBranch.</code><code class="descname">Branch</code><span class="sig-paren">(</span><em>from_bus</em>, <em>to_bus</em>, <em>name=''</em>, <em>r=0.0</em>, <em>x=0.0</em>, <em>b=0.0</em>, <em>rate_a=0.0</em>, <em>rate_b=0.0</em>, <em>rate_c=0.0</em>, <em>ratio=0.0</em>, <em>angle=0.0</em>, <em>angle_min=-360.0</em>, <em>angle_max=360.0</em>, <em>online=True</em>, <em>p_from=0.0</em>, <em>q_from=0.0</em>, <em>p_to=0.0</em>, <em>q_to=0.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topology_BusBranch.html#Branch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Topology_BusBranch.Branch" title="Permalink to this definition">¶</a></dt>
+<dd><p>A <em>Branch</em> represents a vertex in a Bus/Branch network.</p>
+<dl class="attribute">
+<dt id="Topology_BusBranch.Branch.angle">
+<code class="descname">angle</code><em class="property"> = None</em><a class="headerlink" href="#Topology_BusBranch.Branch.angle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transformer phase shift angle (degree, positive =&gt; delay)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_BusBranch.Branch.angle_max">
+<code class="descname">angle_max</code><em class="property"> = None</em><a class="headerlink" href="#Topology_BusBranch.Branch.angle_max" title="Permalink to this definition">¶</a></dt>
+<dd><p>Maximum angle difference between both ends
+(from_bus.va - to_bus.va) (degree)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_BusBranch.Branch.angle_min">
+<code class="descname">angle_min</code><em class="property"> = None</em><a class="headerlink" href="#Topology_BusBranch.Branch.angle_min" title="Permalink to this definition">¶</a></dt>
+<dd><p>Minimum angle difference between both ends
+(from_bus.va - to_bus.va) (degree)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_BusBranch.Branch.b">
+<code class="descname">b</code><em class="property"> = None</em><a class="headerlink" href="#Topology_BusBranch.Branch.b" title="Permalink to this definition">¶</a></dt>
+<dd><p>Total line charging susceptance (p.u.)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_BusBranch.Branch.from_bus">
+<code class="descname">from_bus</code><em class="property"> = None</em><a class="headerlink" href="#Topology_BusBranch.Branch.from_bus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reference to the bus on the from-side</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_BusBranch.Branch.name">
+<code class="descname">name</code><em class="property"> = None</em><a class="headerlink" href="#Topology_BusBranch.Branch.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Branch name</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_BusBranch.Branch.online">
+<code class="descname">online</code><em class="property"> = None</em><a class="headerlink" href="#Topology_BusBranch.Branch.online" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initial branch status (in service (True) or
+out of service (False))</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_BusBranch.Branch.p_from">
+<code class="descname">p_from</code><em class="property"> = None</em><a class="headerlink" href="#Topology_BusBranch.Branch.p_from" title="Permalink to this definition">¶</a></dt>
+<dd><p>Real power injected at &#8220;from&#8221; bus end (MW)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_BusBranch.Branch.p_to">
+<code class="descname">p_to</code><em class="property"> = None</em><a class="headerlink" href="#Topology_BusBranch.Branch.p_to" title="Permalink to this definition">¶</a></dt>
+<dd><p>Real power injected at &#8220;to&#8221; bus end (MW)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_BusBranch.Branch.q_from">
+<code class="descname">q_from</code><em class="property"> = None</em><a class="headerlink" href="#Topology_BusBranch.Branch.q_from" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reactive power injected at &#8220;from&#8221; bus end (MVAr)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_BusBranch.Branch.q_to">
+<code class="descname">q_to</code><em class="property"> = None</em><a class="headerlink" href="#Topology_BusBranch.Branch.q_to" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reactive power injected at &#8220;to&#8221; bus end (MVAr)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_BusBranch.Branch.r">
+<code class="descname">r</code><em class="property"> = None</em><a class="headerlink" href="#Topology_BusBranch.Branch.r" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resistance (p.u.)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_BusBranch.Branch.rate_a">
+<code class="descname">rate_a</code><em class="property"> = None</em><a class="headerlink" href="#Topology_BusBranch.Branch.rate_a" title="Permalink to this definition">¶</a></dt>
+<dd><p>MVA rating A (long term rating)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_BusBranch.Branch.rate_b">
+<code class="descname">rate_b</code><em class="property"> = None</em><a class="headerlink" href="#Topology_BusBranch.Branch.rate_b" title="Permalink to this definition">¶</a></dt>
+<dd><p>MVA rating B (short term rating)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_BusBranch.Branch.rate_c">
+<code class="descname">rate_c</code><em class="property"> = None</em><a class="headerlink" href="#Topology_BusBranch.Branch.rate_c" title="Permalink to this definition">¶</a></dt>
+<dd><p>MVA rating C (emergency rating)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_BusBranch.Branch.ratio">
+<code class="descname">ratio</code><em class="property"> = None</em><a class="headerlink" href="#Topology_BusBranch.Branch.ratio" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transformer off nominal turns ratio (=0 for lines)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_BusBranch.Branch.to_bus">
+<code class="descname">to_bus</code><em class="property"> = None</em><a class="headerlink" href="#Topology_BusBranch.Branch.to_bus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reference to the bus on the to-side</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_BusBranch.Branch.x">
+<code class="descname">x</code><em class="property"> = None</em><a class="headerlink" href="#Topology_BusBranch.Branch.x" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reactance (p.u.)</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Topology_BusBranch.Bus">
+<em class="property">class </em><code class="descclassname">Topology_BusBranch.</code><code class="descname">Bus</code><span class="sig-paren">(</span><em>name=''</em>, <em>btype=1</em>, <em>pd=0.0</em>, <em>qd=0.0</em>, <em>base_kv=100.0</em>, <em>vm=1.0</em>, <em>va=0.0</em>, <em>vm_max=1.1</em>, <em>vm_min=0.9</em>, <em>gs=0.0</em>, <em>bs=0.0</em>, <em>area=1</em>, <em>zone=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topology_BusBranch.html#Bus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Topology_BusBranch.Bus" title="Permalink to this definition">¶</a></dt>
+<dd><p>A <em>Bus</em> represents a node in a bus/branch network graph.</p>
+<dl class="attribute">
+<dt id="Topology_BusBranch.Bus.area">
+<code class="descname">area</code><em class="property"> = None</em><a class="headerlink" href="#Topology_BusBranch.Bus.area" title="Permalink to this definition">¶</a></dt>
+<dd><p>Area number (positive integer)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_BusBranch.Bus.base_kv">
+<code class="descname">base_kv</code><em class="property"> = None</em><a class="headerlink" href="#Topology_BusBranch.Bus.base_kv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base voltage (kV)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_BusBranch.Bus.bs">
+<code class="descname">bs</code><em class="property"> = None</em><a class="headerlink" href="#Topology_BusBranch.Bus.bs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shunt susceptance (MVAr injected at V = 1. p.u.)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_BusBranch.Bus.btype">
+<code class="descname">btype</code><em class="property"> = None</em><a class="headerlink" href="#Topology_BusBranch.Bus.btype" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bus type (One of these attributes of <a class="reference internal" href="#Topology_BusBranch.bus_type" title="Topology_BusBranch.bus_type"><code class="xref py py-obj docutils literal"><span class="pre">bus_type</span></code></a>:
+<em>PQ</em>, <em>PV</em>, <em>REF</em>, <em>ISOLATED</em>)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_BusBranch.Bus.gs">
+<code class="descname">gs</code><em class="property"> = None</em><a class="headerlink" href="#Topology_BusBranch.Bus.gs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shunt conductance (MVAr injected at V = 1. p.u.)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_BusBranch.Bus.id">
+<code class="descname">id</code><em class="property"> = None</em><a class="headerlink" href="#Topology_BusBranch.Bus.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Autogenerated ID (subsequent numbering, starting from 1)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_BusBranch.Bus.id_generator">
+<code class="descname">id_generator</code><em class="property"> = count(1)</em><a class="headerlink" href="#Topology_BusBranch.Bus.id_generator" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_BusBranch.Bus.name">
+<code class="descname">name</code><em class="property"> = None</em><a class="headerlink" href="#Topology_BusBranch.Bus.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bus name</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_BusBranch.Bus.pd">
+<code class="descname">pd</code><em class="property"> = None</em><a class="headerlink" href="#Topology_BusBranch.Bus.pd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Active power demand (MW)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_BusBranch.Bus.pd_orig">
+<code class="descname">pd_orig</code><a class="headerlink" href="#Topology_BusBranch.Bus.pd_orig" title="Permalink to this definition">¶</a></dt>
+<dd><p>The value of <code class="docutils literal"><span class="pre">self.pd</span></code> when the instance was created.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_BusBranch.Bus.qd">
+<code class="descname">qd</code><em class="property"> = None</em><a class="headerlink" href="#Topology_BusBranch.Bus.qd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reactive power demand (MVAr)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_BusBranch.Bus.qd_orig">
+<code class="descname">qd_orig</code><a class="headerlink" href="#Topology_BusBranch.Bus.qd_orig" title="Permalink to this definition">¶</a></dt>
+<dd><p>The value of <code class="docutils literal"><span class="pre">self.qd</span></code> when the instance was created.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Topology_BusBranch.Bus.reset">
+<code class="descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topology_BusBranch.html#Bus.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Topology_BusBranch.Bus.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resets <code class="docutils literal"><span class="pre">self.pd</span></code> and <code class="docutils literal"><span class="pre">self.qd</span></code> to their original values (that they
+had when the instance was created).</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_BusBranch.Bus.va">
+<code class="descname">va</code><em class="property"> = None</em><a class="headerlink" href="#Topology_BusBranch.Bus.va" title="Permalink to this definition">¶</a></dt>
+<dd><p>Voltage angle (degrees)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_BusBranch.Bus.vm">
+<code class="descname">vm</code><em class="property"> = None</em><a class="headerlink" href="#Topology_BusBranch.Bus.vm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Voltage magnitude (p.u.)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_BusBranch.Bus.vm_max">
+<code class="descname">vm_max</code><em class="property"> = None</em><a class="headerlink" href="#Topology_BusBranch.Bus.vm_max" title="Permalink to this definition">¶</a></dt>
+<dd><p>maximum voltage magnitude (p.u.)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_BusBranch.Bus.vm_min">
+<code class="descname">vm_min</code><em class="property"> = None</em><a class="headerlink" href="#Topology_BusBranch.Bus.vm_min" title="Permalink to this definition">¶</a></dt>
+<dd><p>minimum voltage magnitude (p.u.)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_BusBranch.Bus.zone">
+<code class="descname">zone</code><em class="property"> = None</em><a class="headerlink" href="#Topology_BusBranch.Bus.zone" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loss zone (positive integer)</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Topology_BusBranch.Case">
+<em class="property">class </em><code class="descclassname">Topology_BusBranch.</code><code class="descname">Case</code><span class="sig-paren">(</span><em>base_mva</em>, <em>buses</em>, <em>generators</em>, <em>branches</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topology_BusBranch.html#Case"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Topology_BusBranch.Case" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Case</em> is a container for :class:<a href="#id1"><span class="problematic" id="id2">`</span></a>Bus`es, :class:<a href="#id3"><span class="problematic" id="id4">`</span></a>Generator`s and
+:class:<a href="#id5"><span class="problematic" id="id6">`</span></a>Branch`es.</p>
+<p>It also holds the global <em>base_mva</em> attribute for the case.</p>
+<dl class="method">
+<dt id="Topology_BusBranch.Case.reset">
+<code class="descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topology_BusBranch.html#Case.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Topology_BusBranch.Case.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resets all buses and generators.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Topology_BusBranch.Generator">
+<em class="property">class </em><code class="descclassname">Topology_BusBranch.</code><code class="descname">Generator</code><span class="sig-paren">(</span><em>bus</em>, <em>name=''</em>, <em>pg=0.0</em>, <em>qg=0.0</em>, <em>pg_min=0.0</em>, <em>pg_max=0.0</em>, <em>qg_min=0.0</em>, <em>qg_max=0.0</em>, <em>vg=1.0</em>, <em>base_mva=0.0</em>, <em>online=True</em>, <em>pc1=0.0</em>, <em>pc2=0.0</em>, <em>qc1_min=0.0</em>, <em>qc1_max=0.0</em>, <em>qc2_min=0.0</em>, <em>qc2_max=0.0</em>, <em>ramp_agc=0.0</em>, <em>ramp_10=0.0</em>, <em>ramp_30=0.0</em>, <em>ramp_q=0.0</em>, <em>apf=0.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topology_BusBranch.html#Generator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Topology_BusBranch.Generator" title="Permalink to this definition">¶</a></dt>
+<dd><p>A <em>Generator</em> can be attached to a <a class="reference internal" href="#Topology_BusBranch.Bus" title="Topology_BusBranch.Bus"><code class="xref py py-class docutils literal"><span class="pre">Bus</span></code></a>.</p>
+<dl class="attribute">
+<dt id="Topology_BusBranch.Generator.apf">
+<code class="descname">apf</code><em class="property"> = None</em><a class="headerlink" href="#Topology_BusBranch.Generator.apf" title="Permalink to this definition">¶</a></dt>
+<dd><p>APF, area participation factor</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_BusBranch.Generator.base_mva">
+<code class="descname">base_mva</code><em class="property"> = None</em><a class="headerlink" href="#Topology_BusBranch.Generator.base_mva" title="Permalink to this definition">¶</a></dt>
+<dd><p>Total MVA base of this machine, defaults to baseMVA</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_BusBranch.Generator.bus">
+<code class="descname">bus</code><em class="property"> = None</em><a class="headerlink" href="#Topology_BusBranch.Generator.bus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reference to the bus the generator is connected to</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_BusBranch.Generator.name">
+<code class="descname">name</code><em class="property"> = None</em><a class="headerlink" href="#Topology_BusBranch.Generator.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generator name</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_BusBranch.Generator.online">
+<code class="descname">online</code><em class="property"> = None</em><a class="headerlink" href="#Topology_BusBranch.Generator.online" title="Permalink to this definition">¶</a></dt>
+<dd><p>Status (machine in service (True) or out of service (False))</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_BusBranch.Generator.pc1">
+<code class="descname">pc1</code><em class="property"> = None</em><a class="headerlink" href="#Topology_BusBranch.Generator.pc1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lower real power output of PQ capability curve (MW)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_BusBranch.Generator.pc2">
+<code class="descname">pc2</code><em class="property"> = None</em><a class="headerlink" href="#Topology_BusBranch.Generator.pc2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Upper real power output of PQ capability curve (MW)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_BusBranch.Generator.pg">
+<code class="descname">pg</code><em class="property"> = None</em><a class="headerlink" href="#Topology_BusBranch.Generator.pg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Real power output (MW)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_BusBranch.Generator.pg_max">
+<code class="descname">pg_max</code><em class="property"> = None</em><a class="headerlink" href="#Topology_BusBranch.Generator.pg_max" title="Permalink to this definition">¶</a></dt>
+<dd><p>Maximum real power output (MW)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_BusBranch.Generator.pg_min">
+<code class="descname">pg_min</code><em class="property"> = None</em><a class="headerlink" href="#Topology_BusBranch.Generator.pg_min" title="Permalink to this definition">¶</a></dt>
+<dd><p>Minimum real power output (MW)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_BusBranch.Generator.pg_orig">
+<code class="descname">pg_orig</code><a class="headerlink" href="#Topology_BusBranch.Generator.pg_orig" title="Permalink to this definition">¶</a></dt>
+<dd><p>The value of <code class="docutils literal"><span class="pre">self.pg</span></code> when the instance was created.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_BusBranch.Generator.qc1_max">
+<code class="descname">qc1_max</code><em class="property"> = None</em><a class="headerlink" href="#Topology_BusBranch.Generator.qc1_max" title="Permalink to this definition">¶</a></dt>
+<dd><p>Maximum reactive power output at Pc1 (MVAr)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_BusBranch.Generator.qc1_min">
+<code class="descname">qc1_min</code><em class="property"> = None</em><a class="headerlink" href="#Topology_BusBranch.Generator.qc1_min" title="Permalink to this definition">¶</a></dt>
+<dd><p>Minimum reactive power output at Pc1 (MVAr)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_BusBranch.Generator.qc2_max">
+<code class="descname">qc2_max</code><em class="property"> = None</em><a class="headerlink" href="#Topology_BusBranch.Generator.qc2_max" title="Permalink to this definition">¶</a></dt>
+<dd><p>Maximum reactive power output at Pc2 (MVAr)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_BusBranch.Generator.qc2_min">
+<code class="descname">qc2_min</code><em class="property"> = None</em><a class="headerlink" href="#Topology_BusBranch.Generator.qc2_min" title="Permalink to this definition">¶</a></dt>
+<dd><p>Minimum reactive power output at Pc2 (MVAr)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_BusBranch.Generator.qg">
+<code class="descname">qg</code><em class="property"> = None</em><a class="headerlink" href="#Topology_BusBranch.Generator.qg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reactive power output (MVAr)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_BusBranch.Generator.qg_max">
+<code class="descname">qg_max</code><em class="property"> = None</em><a class="headerlink" href="#Topology_BusBranch.Generator.qg_max" title="Permalink to this definition">¶</a></dt>
+<dd><p>Maximum reactive power output at Pc1 (MVAr)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_BusBranch.Generator.qg_min">
+<code class="descname">qg_min</code><em class="property"> = None</em><a class="headerlink" href="#Topology_BusBranch.Generator.qg_min" title="Permalink to this definition">¶</a></dt>
+<dd><p>Minimum reactive power output at Pc1 (MVAr)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_BusBranch.Generator.qg_orig">
+<code class="descname">qg_orig</code><a class="headerlink" href="#Topology_BusBranch.Generator.qg_orig" title="Permalink to this definition">¶</a></dt>
+<dd><p>The value of <code class="docutils literal"><span class="pre">self.qg</span></code> when the instance was created.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_BusBranch.Generator.ramp_10">
+<code class="descname">ramp_10</code><em class="property"> = None</em><a class="headerlink" href="#Topology_BusBranch.Generator.ramp_10" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ramp rate for 10 minute reserves (MW)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_BusBranch.Generator.ramp_30">
+<code class="descname">ramp_30</code><em class="property"> = None</em><a class="headerlink" href="#Topology_BusBranch.Generator.ramp_30" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ramp rate for 30 minute reserves (MW)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_BusBranch.Generator.ramp_agc">
+<code class="descname">ramp_agc</code><em class="property"> = None</em><a class="headerlink" href="#Topology_BusBranch.Generator.ramp_agc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ramp rate for load following/AGC (MW/min)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_BusBranch.Generator.ramp_q">
+<code class="descname">ramp_q</code><em class="property"> = None</em><a class="headerlink" href="#Topology_BusBranch.Generator.ramp_q" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ramp rate for reactive power (2 sec timescale) (MVAr/min)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Topology_BusBranch.Generator.reset">
+<code class="descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topology_BusBranch.html#Generator.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Topology_BusBranch.Generator.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resets <code class="docutils literal"><span class="pre">self.pg</span></code> and <code class="docutils literal"><span class="pre">self.qg</span></code> to their original values (that they
+had when the instance was created).</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_BusBranch.Generator.vg">
+<code class="descname">vg</code><em class="property"> = None</em><a class="headerlink" href="#Topology_BusBranch.Generator.vg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Voltage magnitude setpoint (p.u.)</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Topology_BusBranch.Point">
+<em class="property">class </em><code class="descclassname">Topology_BusBranch.</code><code class="descname">Point</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="headerlink" href="#Topology_BusBranch.Point" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="Topology_BusBranch.Point._asdict">
+<code class="descname">_asdict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Topology_BusBranch.Point._asdict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a new OrderedDict which maps field names to their values</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_BusBranch.Point._fields">
+<code class="descname">_fields</code><em class="property"> = ('x', 'y')</em><a class="headerlink" href="#Topology_BusBranch.Point._fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="classmethod">
+<dt id="Topology_BusBranch.Point._make">
+<em class="property">classmethod </em><code class="descname">_make</code><span class="sig-paren">(</span><em>iterable</em>, <em>new=&lt;built-in method __new__ of type object at 0x000000001E2A0E50&gt;</em>, <em>len=&lt;built-in function len&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#Topology_BusBranch.Point._make" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make a new Point object from a sequence or iterable</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Topology_BusBranch.Point._replace">
+<code class="descname">_replace</code><span class="sig-paren">(</span><em>_self</em>, <em>**kwds</em><span class="sig-paren">)</span><a class="headerlink" href="#Topology_BusBranch.Point._replace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a new Point object replacing specified fields with new values</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_BusBranch.Point.x">
+<code class="descname">x</code><a class="headerlink" href="#Topology_BusBranch.Point.x" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_BusBranch.Point.y">
+<code class="descname">y</code><a class="headerlink" href="#Topology_BusBranch.Point.y" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="data">
+<dt id="Topology_BusBranch.bus_type">
+<code class="descclassname">Topology_BusBranch.</code><code class="descname">bus_type</code><em class="property"> = BusType(PQ=1, PV=2, REF=3, ISOLATED=4)</em><a class="headerlink" href="#Topology_BusBranch.bus_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the Matpower BUS_TYPE constants</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="PreProcess_CIM_files.html"
+                        title="previous chapter">PreProcess_CIM_files module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="Topology_NodeBreaker.html"
+                        title="next chapter">Topology_NodeBreaker module</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/Topology_BusBranch.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Topology_NodeBreaker.html" title="Topology_NodeBreaker module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="PreProcess_CIM_files.html" title="PreProcess_CIM_files module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">CIM2Matpower 160513 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="source_code_doc.html" >Source code documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, Konstantin Gerasimov.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
+    </div>
+  </body>
+</html>

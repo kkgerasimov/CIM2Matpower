@@ -1,0 +1,189 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>PreProcess_CIM_files module &mdash; CIM2Matpower 160513 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '160513',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="CIM2Matpower 160513 documentation" href="index.html" />
+    <link rel="up" title="Source code documentation" href="source_code_doc.html" />
+    <link rel="next" title="Topology_BusBranch module" href="Topology_BusBranch.html" />
+    <link rel="prev" title="Source code documentation" href="source_code_doc.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Topology_BusBranch.html" title="Topology_BusBranch module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="source_code_doc.html" title="Source code documentation"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">CIM2Matpower 160513 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="source_code_doc.html" accesskey="U">Source code documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-PreProcess_CIM_files">
+<span id="preprocess-cim-files-module"></span><h1>PreProcess_CIM_files module<a class="headerlink" href="#module-PreProcess_CIM_files" title="Permalink to this headline">¶</a></h1>
+<p>The module <code class="docutils literal"><span class="pre">PreProcess_CIM_files</span></code> defines function to be used for preprocessing CIM files before they are parsed with
+the <code class="docutils literal"><span class="pre">PyCIM</span></code> <code class="docutils literal"><span class="pre">RDFXMLReader</span></code>. Most often it means fixing certain HTML tags.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="CIM2Matpower.html#CIM2Matpower.cim_to_mpc" title="CIM2Matpower.cim_to_mpc"><code class="xref py py-func docutils literal"><span class="pre">CIM2Matpower.cim_to_mpc()</span></code></a> and the Matlab functions <code class="docutils literal"><span class="pre">MPC_NODAL2BB</span></code> and <code class="docutils literal"><span class="pre">MPC_BB2NODAL</span></code></p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Date:</th><td class="field-body">2016-05-10</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Authors:</th><td class="field-body">Konstantin Gerasimov</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">e-mail:</th><td class="field-body"><a class="reference external" href="mailto:kkgerasimov&#37;&#52;&#48;gmail&#46;com">kkgerasimov<span>&#64;</span>gmail<span>&#46;</span>com</a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Credits:</th><td class="field-body">This function is created for KU-Leuven as part of the GARPUR project <a class="reference external" href="http://www.garpur-project.eu">http://www.garpur-project.eu</a></td>
+</tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="PreProcess_CIM_files.fix_RTE_cim_files">
+<code class="descclassname">PreProcess_CIM_files.</code><code class="descname">fix_RTE_cim_files</code><span class="sig-paren">(</span><em>cim_files</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PreProcess_CIM_files.html#fix_RTE_cim_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PreProcess_CIM_files.fix_RTE_cim_files" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines string substitutions to be made in the CIM files (specific to RTE provided CIM files) so that they are
+compliant with the <code class="docutils literal"><span class="pre">PyCIM</span></code> package.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The CIM14 standard specifies that ReactiveCapabilityCurve.CurveDatas should point to the CurveData objects.
+However RTE&#8217;s implementation of CIM14 does the opposite which lead to not being able to access CurveData about
+the ReactiveCapabilityCurve from within the generator. The same goes for the other substitutions defined in this
+function.</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cim_files</strong> (<em>list of strings</em>) &#8211; CIM XML files</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="PreProcess_CIM_files.fix_cim_files">
+<code class="descclassname">PreProcess_CIM_files.</code><code class="descname">fix_cim_files</code><span class="sig-paren">(</span><em>cim_files</em>, <em>substitutions</em>, <em>cim_version</em>, <em>subst_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PreProcess_CIM_files.html#fix_cim_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PreProcess_CIM_files.fix_cim_files" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads a XML file (containing the CIM model) and substitute strings, as defined by the <em>substitutions</em> input parameter.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>cim_files</strong> (<em>list of strings</em>) &#8211; CIM XML files</li>
+<li><strong>substitutions</strong> (<em>dictionary</em>) &#8211; defines substitutions to be made in the CIM XML file in the following format
+substitutions[( &#8216;original_string&#8217;, &#8216;substitution_string&#8217; )] = count_of_substitutions</li>
+<li><strong>cim_version</strong> (<em>strings</em>) &#8211; the CIM subst_id for which the substitution applies</li>
+<li><strong>subst_id</strong> (<em>string</em>) &#8211; id of the set of substitutions to be made</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">None</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="source_code_doc.html"
+                        title="previous chapter">Source code documentation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="Topology_BusBranch.html"
+                        title="next chapter">Topology_BusBranch module</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/PreProcess_CIM_files.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Topology_BusBranch.html" title="Topology_BusBranch module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="source_code_doc.html" title="Source code documentation"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">CIM2Matpower 160513 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="source_code_doc.html" >Source code documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, Konstantin Gerasimov.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
+    </div>
+  </body>
+</html>

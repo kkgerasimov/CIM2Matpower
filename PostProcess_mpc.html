@@ -1,0 +1,195 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>PostProcess_mpc module &mdash; CIM2Matpower 160513 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '160513',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="CIM2Matpower 160513 documentation" href="index.html" />
+    <link rel="up" title="Source code documentation" href="source_code_doc.html" />
+    <link rel="next" title="Matlab files" href="matlab_files.html" />
+    <link rel="prev" title="CIM2Matpower module" href="CIM2Matpower.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="matlab_files.html" title="Matlab files"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="CIM2Matpower.html" title="CIM2Matpower module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">CIM2Matpower 160513 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="source_code_doc.html" accesskey="U">Source code documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-PostProcess_mpc">
+<span id="postprocess-mpc-module"></span><h1>PostProcess_mpc module<a class="headerlink" href="#module-PostProcess_mpc" title="Permalink to this headline">¶</a></h1>
+<p>The PYPOWER extension converts <code class="xref py py-class docutils literal"><span class="pre">Case</span></code> objects to PYPOWER cases and
+writes results from a power flow calculation back to the orignal case instance.
+The module <code class="docutils literal"><span class="pre">PostProcess_CIM_files</span></code> defines function to be used for preprocessing CIM files before they are parsed with
+the <code class="docutils literal"><span class="pre">PyCIM</span></code> <code class="docutils literal"><span class="pre">RDFXMLReader</span></code>. Most often it means fixing certain HTML tags.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This module is based mostly on the the started but never finished OpenSource project Cim2BusBranch <a class="reference external" href="https://www.versioneye.com/Python/Cim2BusBranch/0.1">https://www.versioneye.com/Python/Cim2BusBranch/0.1</a></p>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="CIM2Matpower.html#CIM2Matpower.cim_to_mpc" title="CIM2Matpower.cim_to_mpc"><code class="xref py py-func docutils literal"><span class="pre">CIM2Matpower.cim_to_mpc()</span></code></a> and the Matlab functions <code class="docutils literal"><span class="pre">MPC_NODAL2BB</span></code> and <code class="docutils literal"><span class="pre">MPC_BB2NODAL</span></code></p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Date:</th><td class="field-body">2016-05-10</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Authors:</th><td class="field-body">Konstantin Gerasimov</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">e-mail:</th><td class="field-body"><a class="reference external" href="mailto:kkgerasimov&#37;&#52;&#48;gmail&#46;com">kkgerasimov<span>&#64;</span>gmail<span>&#46;</span>com</a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Credits:</th><td class="field-body">This function is created for KU-Leuven as part of the GARPUR project <a class="reference external" href="http://www.garpur-project.eu">http://www.garpur-project.eu</a></td>
+</tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="PostProcess_mpc._fill_branch_array">
+<code class="descclassname">PostProcess_mpc.</code><code class="descname">_fill_branch_array</code><span class="sig-paren">(</span><em>branch_array</em>, <em>branch</em>, <em>bus_ids</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PostProcess_mpc.html#_fill_branch_array"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PostProcess_mpc._fill_branch_array" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fills the array of a gen with its values.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PostProcess_mpc._fill_bus_array">
+<code class="descclassname">PostProcess_mpc.</code><code class="descname">_fill_bus_array</code><span class="sig-paren">(</span><em>bus_array</em>, <em>bus</em>, <em>bus_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PostProcess_mpc.html#_fill_bus_array"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PostProcess_mpc._fill_bus_array" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fills the array of a bus with its values.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PostProcess_mpc._fill_gen_array">
+<code class="descclassname">PostProcess_mpc.</code><code class="descname">_fill_gen_array</code><span class="sig-paren">(</span><em>gen_array</em>, <em>gen</em>, <em>bus_ids</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PostProcess_mpc.html#_fill_gen_array"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PostProcess_mpc._fill_gen_array" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fills the array of a gen with its values.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PostProcess_mpc._make_branch_list">
+<code class="descclassname">PostProcess_mpc.</code><code class="descname">_make_branch_list</code><span class="sig-paren">(</span><em>branches</em>, <em>bus_ids</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PostProcess_mpc.html#_make_branch_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PostProcess_mpc._make_branch_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a list of branches for PYPOWER.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PostProcess_mpc._make_bus_list">
+<code class="descclassname">PostProcess_mpc.</code><code class="descname">_make_bus_list</code><span class="sig-paren">(</span><em>case</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PostProcess_mpc.html#_make_bus_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PostProcess_mpc._make_bus_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a list ob bus arrays for PYPOWER.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PostProcess_mpc._make_bus_names">
+<code class="descclassname">PostProcess_mpc.</code><code class="descname">_make_bus_names</code><span class="sig-paren">(</span><em>case</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PostProcess_mpc.html#_make_bus_names"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PostProcess_mpc._make_bus_names" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a list with the busnames.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PostProcess_mpc._make_gen_list">
+<code class="descclassname">PostProcess_mpc.</code><code class="descname">_make_gen_list</code><span class="sig-paren">(</span><em>generators</em>, <em>bus_ids</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PostProcess_mpc.html#_make_gen_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PostProcess_mpc._make_gen_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a list of generators for PYPOWER.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PostProcess_mpc.create_mpc">
+<code class="descclassname">PostProcess_mpc.</code><code class="descname">create_mpc</code><span class="sig-paren">(</span><em>case</em>, <em>node_breaker_topology</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PostProcess_mpc.html#create_mpc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PostProcess_mpc.create_mpc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates and returns a Matpower case (mpc) from <em>case</em>.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="CIM2Matpower.html"
+                        title="previous chapter">CIM2Matpower module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="matlab_files.html"
+                        title="next chapter">Matlab files</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/PostProcess_mpc.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="matlab_files.html" title="Matlab files"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="CIM2Matpower.html" title="CIM2Matpower module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">CIM2Matpower 160513 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="source_code_doc.html" >Source code documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, Konstantin Gerasimov.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
+    </div>
+  </body>
+</html>

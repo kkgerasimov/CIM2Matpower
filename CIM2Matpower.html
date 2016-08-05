@@ -1,0 +1,303 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>CIM2Matpower module &mdash; CIM2Matpower 160513 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '160513',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="CIM2Matpower 160513 documentation" href="index.html" />
+    <link rel="up" title="Source code documentation" href="source_code_doc.html" />
+    <link rel="next" title="PostProcess_mpc module" href="PostProcess_mpc.html" />
+    <link rel="prev" title="Topology_NodeBreaker module" href="Topology_NodeBreaker.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="PostProcess_mpc.html" title="PostProcess_mpc module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Topology_NodeBreaker.html" title="Topology_NodeBreaker module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">CIM2Matpower 160513 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="source_code_doc.html" accesskey="U">Source code documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-CIM2Matpower">
+<span id="cim2matpower-module"></span><h1>CIM2Matpower module<a class="headerlink" href="#module-CIM2Matpower" title="Permalink to this headline">¶</a></h1>
+<p>This module contains the core functionality of the CIM to Matpower import tool.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="Topology_NodeBreaker.html#module-Topology_NodeBreaker" title="Topology_NodeBreaker"><code class="xref py py-mod docutils literal"><span class="pre">Topology_NodeBreaker</span></code></a> and <a class="reference internal" href="#module-CIM2Matpower" title="CIM2Matpower"><code class="xref py py-mod docutils literal"><span class="pre">CIM2Matpower</span></code></a></p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Date:</th><td class="field-body">2016-05-10</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Authors:</th><td class="field-body">Konstantin Gerasimov</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">e-mail:</th><td class="field-body"><a class="reference external" href="mailto:kkgerasimov&#37;&#52;&#48;gmail&#46;com">kkgerasimov<span>&#64;</span>gmail<span>&#46;</span>com</a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Credits:</th><td class="field-body">This function is created for KU-Leuven as part of the GARPUR project <a class="reference external" href="http://www.garpur-project.eu">http://www.garpur-project.eu</a></td>
+</tr>
+</tbody>
+</table>
+<dl class="class">
+<dt id="CIM2Matpower.CIM2Matpower">
+<em class="property">class </em><code class="descclassname">CIM2Matpower.</code><code class="descname">CIM2Matpower</code><span class="sig-paren">(</span><em>cim_files</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CIM2Matpower.html#CIM2Matpower"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#CIM2Matpower.CIM2Matpower" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <em>CIM2Matpower</em> transforms a CIM topology in <em>cim_file</em> into a
+bus/branch topology.</p>
+<p><em>cim_file</em> is the path to an XML/RDF encoded CIM topology.</p>
+<dl class="method">
+<dt id="CIM2Matpower.CIM2Matpower._create_bb_topology">
+<code class="descname">_create_bb_topology</code><span class="sig-paren">(</span><em>BasePower_MVA</em>, <em>tnodes</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CIM2Matpower.html#CIM2Matpower._create_bb_topology"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#CIM2Matpower.CIM2Matpower._create_bb_topology" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates the <a class="reference internal" href="Topology_BusBranch.html#Topology_BusBranch.Case" title="Topology_BusBranch.Case"><code class="xref py py-class docutils literal"><span class="pre">Topology_BusBranch.Case</span></code></a></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="CIM2Matpower.CIM2Matpower._create_branches">
+<code class="descname">_create_branches</code><span class="sig-paren">(</span><em>lines</em>, <em>p_transformers</em>, <em>BasePower_MVA</em>, <em>buses</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CIM2Matpower.html#CIM2Matpower._create_branches"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#CIM2Matpower.CIM2Matpower._create_branches" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates list of <a class="reference internal" href="Topology_BusBranch.html#Topology_BusBranch.Branch" title="Topology_BusBranch.Branch"><code class="xref py py-class docutils literal"><span class="pre">Topology_BusBranch.Branch</span></code></a> -es</p>
+<p>Create list of <a class="reference internal" href="Topology_NodeBreaker.html#Topology_NodeBreaker.Branch" title="Topology_NodeBreaker.Branch"><code class="xref py py-class docutils literal"><span class="pre">Topology_NodeBreaker.Branch</span></code></a>, <a class="reference internal" href="Topology_NodeBreaker.html#Topology_NodeBreaker.PhaseTapChanger" title="Topology_NodeBreaker.PhaseTapChanger"><code class="xref py py-class docutils literal"><span class="pre">Topology_NodeBreaker.PhaseTapChanger</span></code></a> and <a class="reference internal" href="Topology_NodeBreaker.html#Topology_NodeBreaker.RatioTapChanger" title="Topology_NodeBreaker.RatioTapChanger"><code class="xref py py-class docutils literal"><span class="pre">Topology_NodeBreaker.RatioTapChanger</span></code></a> -s</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="CIM2Matpower.CIM2Matpower._create_buses_and_gens">
+<code class="descname">_create_buses_and_gens</code><span class="sig-paren">(</span><em>tnodes</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CIM2Matpower.html#CIM2Matpower._create_buses_and_gens"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#CIM2Matpower.CIM2Matpower._create_buses_and_gens" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates dictionary of <a class="reference internal" href="Topology_BusBranch.html#Topology_BusBranch.Bus" title="Topology_BusBranch.Bus"><code class="xref py py-class docutils literal"><span class="pre">Topology_BusBranch.Bus</span></code></a> -es and list of <a class="reference internal" href="Topology_BusBranch.html#Topology_BusBranch.Generator" title="Topology_BusBranch.Generator"><code class="xref py py-class docutils literal"><span class="pre">Topology_BusBranch.Generator</span></code></a> -s</p>
+<p>Create lists of <code class="docutils literal"><span class="pre">PowerTransformer</span></code> -s and <code class="docutils literal"><span class="pre">ACLineSegment</span></code> -s CIM objects</p>
+<p>Create lists of <a class="reference internal" href="Topology_NodeBreaker.html#Topology_NodeBreaker.Node" title="Topology_NodeBreaker.Node"><code class="xref py py-class docutils literal"><span class="pre">Topology_NodeBreaker.Node</span></code></a>, <a class="reference internal" href="Topology_NodeBreaker.html#Topology_NodeBreaker.Substation" title="Topology_NodeBreaker.Substation"><code class="xref py py-class docutils literal"><span class="pre">Topology_NodeBreaker.Substation</span></code></a>, <a class="reference internal" href="Topology_NodeBreaker.html#Topology_NodeBreaker.Generator" title="Topology_NodeBreaker.Generator"><code class="xref py py-class docutils literal"><span class="pre">Topology_NodeBreaker.Generator</span></code></a>, <a class="reference internal" href="Topology_NodeBreaker.html#Topology_NodeBreaker.Load" title="Topology_NodeBreaker.Load"><code class="xref py py-class docutils literal"><span class="pre">Topology_NodeBreaker.Load</span></code></a> and <a class="reference internal" href="Topology_NodeBreaker.html#Topology_NodeBreaker.Shunt" title="Topology_NodeBreaker.Shunt"><code class="xref py py-class docutils literal"><span class="pre">Topology_NodeBreaker.Shunt</span></code></a> -s</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="CIM2Matpower.CIM2Matpower._find_tnode">
+<code class="descname">_find_tnode</code><span class="sig-paren">(</span><em>terminal</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CIM2Matpower.html#CIM2Matpower._find_tnode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#CIM2Matpower.CIM2Matpower._find_tnode" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="CIM2Matpower.CIM2Matpower._get_acline_mva_lim">
+<code class="descname">_get_acline_mva_lim</code><span class="sig-paren">(</span><em>acline</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CIM2Matpower.html#CIM2Matpower._get_acline_mva_lim"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#CIM2Matpower.CIM2Matpower._get_acline_mva_lim" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="CIM2Matpower.CIM2Matpower._get_base_voltage">
+<code class="descname">_get_base_voltage</code><span class="sig-paren">(</span><em>tnode</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CIM2Matpower.html#CIM2Matpower._get_base_voltage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#CIM2Matpower.CIM2Matpower._get_base_voltage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tries to get a base voltage from <em>tnode</em> (TopologicalNode) to from its connectivity nodes.</p>
+<p>Raises a <code class="xref py py-class docutils literal"><span class="pre">ValueError</span></code> if no base voltage can be found or if the base voltages of the connectivity nodes
+differ from each other.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="CIM2Matpower.CIM2Matpower._get_cls">
+<code class="descname">_get_cls</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CIM2Matpower.html#CIM2Matpower._get_cls"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#CIM2Matpower.CIM2Matpower._get_cls" title="Permalink to this definition">¶</a></dt>
+<dd><p>Imports and returns the class object for <em>name</em>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="CIM2Matpower.CIM2Matpower._get_equipment_cls">
+<code class="descname">_get_equipment_cls</code><span class="sig-paren">(</span><em>names</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CIM2Matpower.html#CIM2Matpower._get_equipment_cls"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#CIM2Matpower.CIM2Matpower._get_equipment_cls" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a touple containing the class objects for <em>names</em>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="CIM2Matpower.CIM2Matpower._get_position_points">
+<code class="descname">_get_position_points</code><span class="sig-paren">(</span><em>equipment</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CIM2Matpower.html#CIM2Matpower._get_position_points"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#CIM2Matpower.CIM2Matpower._get_position_points" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the set of position points (<a class="reference internal" href="Topology_BusBranch.html#Topology_BusBranch.Point" title="Topology_BusBranch.Point"><code class="xref py py-class docutils literal"><span class="pre">Topology_BusBranch.Point</span></code></a>) for
+<em>equipment</em>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="CIM2Matpower.CIM2Matpower._iterate_prim_eq">
+<code class="descname">_iterate_prim_eq</code><span class="sig-paren">(</span><em>cim_objects</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CIM2Matpower.html#CIM2Matpower._iterate_prim_eq"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#CIM2Matpower.CIM2Matpower._iterate_prim_eq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterates over all <em>cim_objects</em> and creates <a href="#id1"><span class="problematic" id="id2">``</span></a>TopologicalNode`-s (if they were not present).
+Find the self.biggest_tnode_island and imports <a href="#id3"><span class="problematic" id="id4">``</span></a>TopologicalNode`-s only from it.
+Create a list of the control Areas and the load Zones.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="CIM2Matpower.CIM2Matpower._primary_one_t">
+<code class="descname">_primary_one_t</code><em class="property"> = ['TransformerWinding', 'EnergySource', 'EnergyConsumer', 'Connector', 'RegulatingCondEq']</em><a class="headerlink" href="#CIM2Matpower.CIM2Matpower._primary_one_t" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="CIM2Matpower.CIM2Matpower._primary_two_t">
+<code class="descname">_primary_two_t</code><em class="property"> = ['Conductor', 'SeriesCompensator', 'PowerTransformer']</em><a class="headerlink" href="#CIM2Matpower.CIM2Matpower._primary_two_t" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="CIM2Matpower.CIM2Matpower._process_cnode">
+<code class="descname">_process_cnode</code><span class="sig-paren">(</span><em>tnode</em>, <em>src_terminal</em>, <em>processed</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CIM2Matpower.html#CIM2Matpower._process_cnode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#CIM2Matpower.CIM2Matpower._process_cnode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Recursively processes the connectivity node connected to <em>src_terminal</em>
+and adds it to terminals.</p>
+<p>You need to pass the terminal and not the connectivity node, because we need the terminal to keep track where
+we are coming from and to not to visit the same terminal again.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="CIM2Matpower.CIM2Matpower._secondary_one_t">
+<code class="descname">_secondary_one_t</code><em class="property"> = ['Ground']</em><a class="headerlink" href="#CIM2Matpower.CIM2Matpower._secondary_one_t" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="CIM2Matpower.CIM2Matpower._secondary_two_t">
+<code class="descname">_secondary_two_t</code><em class="property"> = ['RectifierInverter', 'Switch']</em><a class="headerlink" href="#CIM2Matpower.CIM2Matpower._secondary_two_t" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="CIM2Matpower.CIM2Matpower.import_cim">
+<code class="descname">import_cim</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/CIM2Matpower.html#CIM2Matpower.import_cim"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#CIM2Matpower.CIM2Matpower.import_cim" title="Permalink to this definition">¶</a></dt>
+<dd><p>Actually parses the CIM file and transforms its contents.
+A <a class="reference internal" href="Topology_BusBranch.html#Topology_BusBranch.Case" title="Topology_BusBranch.Case"><code class="xref py py-class docutils literal"><span class="pre">Topology_BusBranch.Case</span></code></a> object is returned.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="CIM2Matpower.cim_to_mpc">
+<code class="descclassname">CIM2Matpower.</code><code class="descname">cim_to_mpc</code><span class="sig-paren">(</span><em>cimfiles</em>, <em>boundary_profiles=[]</em>, <em>log_filename=''</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CIM2Matpower.html#cim_to_mpc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#CIM2Matpower.cim_to_mpc" title="Permalink to this definition">¶</a></dt>
+<dd><p>The main function transforming the CIM XML files into Matpower case structure (mpc) in BusBranch topology,
+together with an additional structure for the NodeBreaker topology data which cannot be fit in the mpc.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">The <em>cimfiles</em> and <em>boundary_profiles</em> must not contain Unidoce characters! Otherwise the <cite>PyCIM</cite> module fails!</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cimfiles</strong> (<em>list of strings</em>) &#8211; the filenames of the CIM files to be imported (preferably with full path)</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">The <em>cimfiles</em> usually come in three files: _EQ, _TP and _SV. If so, they need to be provided in the specified order!</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>boundary_profiles</strong> (<em>list of strings</em>) &#8211; (optional) the filenames of the boundary files to be imported (preferably with full path)</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">The <em>boundary_profiles</em> usually come in two files: _EQ and _TP. If so, they need to be provided in the specified order!</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>log_filename</strong> (<em>string</em>) &#8211; (optional) the filename in which a log should be saved (preferably with full path)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return mpc:</th><td class="field-body">Matpower case, together with information about the NodeBreaker topology</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">In order to be used in Matlab, it still needs to be transformed from Python dictionaries and array to Matlab structure and matrices.</p>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="Topology_NodeBreaker.html#module-Topology_NodeBreaker" title="Topology_NodeBreaker"><code class="xref py py-mod docutils literal"><span class="pre">Topology_NodeBreaker</span></code></a></p>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="Topology_NodeBreaker.html"
+                        title="previous chapter">Topology_NodeBreaker module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="PostProcess_mpc.html"
+                        title="next chapter">PostProcess_mpc module</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/CIM2Matpower.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="PostProcess_mpc.html" title="PostProcess_mpc module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Topology_NodeBreaker.html" title="Topology_NodeBreaker module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">CIM2Matpower 160513 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="source_code_doc.html" >Source code documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, Konstantin Gerasimov.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
+    </div>
+  </body>
+</html>

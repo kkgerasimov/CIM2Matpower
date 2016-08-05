@@ -1,0 +1,759 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Topology_NodeBreaker module &mdash; CIM2Matpower 160513 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '160513',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="CIM2Matpower 160513 documentation" href="index.html" />
+    <link rel="up" title="Source code documentation" href="source_code_doc.html" />
+    <link rel="next" title="CIM2Matpower module" href="CIM2Matpower.html" />
+    <link rel="prev" title="Topology_BusBranch module" href="Topology_BusBranch.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="CIM2Matpower.html" title="CIM2Matpower module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Topology_BusBranch.html" title="Topology_BusBranch module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">CIM2Matpower 160513 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="source_code_doc.html" accesskey="U">Source code documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-Topology_NodeBreaker">
+<span id="topology-nodebreaker-module"></span><h1>Topology_NodeBreaker module<a class="headerlink" href="#module-Topology_NodeBreaker" title="Permalink to this headline">¶</a></h1>
+<p>This module contains definitions of classes to represent ONLY additional data from the CIM import,
+which is not part of the original Matpower data structure, but might be necessary for the GARPUR project.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The data in the classes in this file is structured according to how it will be represented in Matlab, and not
+according to how it will be represented in the Python import code.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The current implementation refers to <code class="docutils literal"><span class="pre">CIMv14</span></code> !</p>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="Topology_BusBranch.html#module-Topology_BusBranch" title="Topology_BusBranch"><code class="xref py py-mod docutils literal"><span class="pre">Topology_BusBranch</span></code></a> and <a class="reference internal" href="CIM2Matpower.html#module-CIM2Matpower" title="CIM2Matpower"><code class="xref py py-mod docutils literal"><span class="pre">CIM2Matpower</span></code></a></p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Date:</th><td class="field-body">2016-05-10</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Authors:</th><td class="field-body">Konstantin Gerasimov</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">e-mail:</th><td class="field-body"><a class="reference external" href="mailto:kkgerasimov&#37;&#52;&#48;gmail&#46;com">kkgerasimov<span>&#64;</span>gmail<span>&#46;</span>com</a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Credits:</th><td class="field-body">This function is created for KU-Leuven as part of the GARPUR project <a class="reference external" href="http://www.garpur-project.eu">http://www.garpur-project.eu</a></td>
+</tr>
+</tbody>
+</table>
+<dl class="class">
+<dt id="Topology_NodeBreaker.Area">
+<em class="property">class </em><code class="descclassname">Topology_NodeBreaker.</code><code class="descname">Area</code><span class="sig-paren">(</span><em>id_cim</em>, <em>name=''</em>, <em>netInterchange=0</em>, <em>pTolerance=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topology_NodeBreaker.html#Area"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Topology_NodeBreaker.Area" title="Permalink to this definition">¶</a></dt>
+<dd><p>Repsenets the basic info about a <code class="docutils literal"><span class="pre">IEC61970::ControlArea::ControlArea</span></code> object from the source CIM file.</p>
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.Area.id">
+<code class="descname">id</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.Area.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>An autogenerated ID, subsequent numbering, starting from 1, (integer)</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This ID goes in the Matpower <code class="docutils literal"><span class="pre">mpc.bus(:,BUS_AREA)</span></code> struct field.</p>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.Area.id_cim">
+<code class="descname">id_cim</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.Area.id_cim" title="Permalink to this definition">¶</a></dt>
+<dd><p>The unique <code class="docutils literal"><span class="pre">mRID</span></code> object identifier attribute (string)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.Area.name">
+<code class="descname">name</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.Area.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <code class="docutils literal"><span class="pre">name</span></code> attribute (string)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.Area.netInterchange">
+<code class="descname">netInterchange</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.Area.netInterchange" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <code class="docutils literal"><span class="pre">netInterchange</span></code> attribute (ActivePower datatype, usually MW for TSO networks)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.Area.pTolerance">
+<code class="descname">pTolerance</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.Area.pTolerance" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <code class="docutils literal"><span class="pre">pTolerance</span></code> attribute (ActivePower datatype, usually MW for TSO networks)</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Topology_NodeBreaker.Branch">
+<em class="property">class </em><code class="descclassname">Topology_NodeBreaker.</code><code class="descname">Branch</code><span class="sig-paren">(</span><em>node_from_id</em>, <em>node_to_id</em>, <em>id_cim</em>, <em>name=''</em>, <em>status_from=False</em>, <em>status_to=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topology_NodeBreaker.html#Branch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Topology_NodeBreaker.Branch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Represents additional to the <a class="reference internal" href="Topology_BusBranch.html#Topology_BusBranch.Branch" title="Topology_BusBranch.Branch"><code class="xref py py-class docutils literal"><span class="pre">Topology_BusBranch.Branch</span></code></a> data about either <code class="docutils literal"><span class="pre">IEC61970::Wires::ACLineSegment</span></code>
+or <code class="docutils literal"><span class="pre">IEC61970::Wires::PowerTransformer</span></code> object from the source CIM file, which formed that <em>Branch</em>.</p>
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.Branch.id">
+<code class="descname">id</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.Branch.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Autogenerated ID, subsequent numbering, starting from 1, (integer)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.Branch.id_cim">
+<code class="descname">id_cim</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.Branch.id_cim" title="Permalink to this definition">¶</a></dt>
+<dd><p>The unique <code class="docutils literal"><span class="pre">mRID</span></code> object identifier attribute (string)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.Branch.name">
+<code class="descname">name</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.Branch.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <code class="docutils literal"><span class="pre">name</span></code> attribute (string)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.Branch.node_from_id">
+<code class="descname">node_from_id</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.Branch.node_from_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A <code class="xref py py-attr docutils literal"><span class="pre">Topology_NodeBreaker.Node.id`</span></code> on Terminal 0 (integer)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.Branch.node_to_id">
+<code class="descname">node_to_id</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.Branch.node_to_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A <code class="xref py py-attr docutils literal"><span class="pre">Topology_NodeBreaker.Node.id`</span></code> on Terminal 1 (integer)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.Branch.status_from">
+<code class="descname">status_from</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.Branch.status_from" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <em>Branch</em> FROM terminal status (Open or Closed), i.e. terminal&#8217;s attribute <code class="docutils literal"><span class="pre">connected</span></code>. (boolean)</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">For <code class="docutils literal"><span class="pre">ACLineSegment</span></code>-s the FROM terminal is terminal 0.
+For <code class="docutils literal"><span class="pre">PowerTransformer</span></code>-s however it is the <strong>secondary</strong> winding&#8217;s terminal (in order to comply with the
+Matpower transformer modeling assumptions)!</p>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.Branch.status_to">
+<code class="descname">status_to</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.Branch.status_to" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <em>Branch</em> TO terminal status (Open or Closed), i.e. terminal&#8217;s attribute <code class="docutils literal"><span class="pre">connected</span></code>. (boolean)</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">For <code class="docutils literal"><span class="pre">ACLineSegment</span></code>-s the TO terminal is terminal 1.
+For <code class="docutils literal"><span class="pre">PowerTransformer</span></code>-s however it is the <strong>primary</strong> winding&#8217;s terminal (in order to comply with the
+Matpower transformer modeling assumptions)!</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Topology_NodeBreaker.Generator">
+<em class="property">class </em><code class="descclassname">Topology_NodeBreaker.</code><code class="descname">Generator</code><span class="sig-paren">(</span><em>node_id</em>, <em>id_cim</em>, <em>type</em>, <em>name=''</em>, <em>mode=''</em>, <em>fuel_type=''</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topology_NodeBreaker.html#Generator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Topology_NodeBreaker.Generator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Repsenets the basic info about a <code class="docutils literal"><span class="pre">IEC61970::Wires::SynchronousMachine</span></code> object from the source CIM file,
+not contained in the Matpower <code class="docutils literal"><span class="pre">mpc.gen</span></code> field.</p>
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.Generator.fuel_type">
+<code class="descname">fuel_type</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.Generator.fuel_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <code class="docutils literal"><span class="pre">FossilFuel.fossilFuelType</span></code> attribute (string) of the <code class="docutils literal"><span class="pre">ThermalGeneratingUnit</span></code> CIM class</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.Generator.id">
+<code class="descname">id</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.Generator.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Autogenerated ID, subsequent numbering, starting from 1, (integer)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.Generator.id_cim">
+<code class="descname">id_cim</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.Generator.id_cim" title="Permalink to this definition">¶</a></dt>
+<dd><p>The unique <code class="docutils literal"><span class="pre">mRID</span></code> object identifier attribute (string)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.Generator.mode">
+<code class="descname">mode</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.Generator.mode" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <code class="docutils literal"><span class="pre">operatingMode</span></code> attribute (string)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.Generator.name">
+<code class="descname">name</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.Generator.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <code class="docutils literal"><span class="pre">name</span></code> attribute (string)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.Generator.node_id">
+<code class="descname">node_id</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.Generator.node_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A <code class="xref py py-attr docutils literal"><span class="pre">Topology_NodeBreaker.Node.id`</span></code> to which the <em>Generator</em> is connected (integer)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.Generator.type">
+<code class="descname">type</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.Generator.type" title="Permalink to this definition">¶</a></dt>
+<dd><p>The prefix of the <code class="docutils literal"><span class="pre">GeneratingUnit</span></code> class reference (string)</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Some <em>Generator</em>-s are assigned to the generic <code class="docutils literal"><span class="pre">GeneratingUnit</span></code> class. Then their <em>type</em> is an empty sting!</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Topology_NodeBreaker.Load">
+<em class="property">class </em><code class="descclassname">Topology_NodeBreaker.</code><code class="descname">Load</code><span class="sig-paren">(</span><em>node_id</em>, <em>id_cim</em>, <em>name=''</em>, <em>p_mw=0</em>, <em>q_mvar=0</em>, <em>status=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topology_NodeBreaker.html#Load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Topology_NodeBreaker.Load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Repsenets the basic info about a <code class="docutils literal"><span class="pre">IEC61970::Wires::EnergyConsumer</span></code> object from the source CIM file.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The problem is that the Matpower mpc structure aggeregates all <em>Load</em>-s in the same bus. However if is
+useful to preserve the information about them (for example for load shedding) and this is why it
+is stored separately in this class.</p>
+</div>
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.Load.id_cim">
+<code class="descname">id_cim</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.Load.id_cim" title="Permalink to this definition">¶</a></dt>
+<dd><p>The unique <code class="docutils literal"><span class="pre">mRID</span></code> object identifier attribute (string)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.Load.name">
+<code class="descname">name</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.Load.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <code class="docutils literal"><span class="pre">name</span></code> attribute (string)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.Load.node_id">
+<code class="descname">node_id</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.Load.node_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A <code class="xref py py-attr docutils literal"><span class="pre">Topology_NodeBreaker.Node.id`</span></code> to which the <em>Load</em> is connected (integer)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.Load.p_mw">
+<code class="descname">p_mw</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.Load.p_mw" title="Permalink to this definition">¶</a></dt>
+<dd><p>The load terminal&#8217;s StateVariable <code class="docutils literal"><span class="pre">SvPowerFlow.p</span></code> attribute (ActivePower datatype, usually MW for TSO networks)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.Load.q_mvar">
+<code class="descname">q_mvar</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.Load.q_mvar" title="Permalink to this definition">¶</a></dt>
+<dd><p>The load terminal&#8217;s StateVariable <code class="docutils literal"><span class="pre">SvPowerFlow.q</span></code> attribute (ReactivePower datatype, usually MVAr for TSO networks)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.Load.status">
+<code class="descname">status</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.Load.status" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <em>Load</em> terminal&#8217;s attribute <code class="docutils literal"><span class="pre">connected</span></code> (boolean)</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Topology_NodeBreaker.Node">
+<em class="property">class </em><code class="descclassname">Topology_NodeBreaker.</code><code class="descname">Node</code><span class="sig-paren">(</span><em>id_cim</em>, <em>bus_id=-1</em>, <em>name=''</em>, <em>desc=''</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topology_NodeBreaker.html#Node"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Topology_NodeBreaker.Node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Repsenets the basic info about a <code class="docutils literal"><span class="pre">IEC61970::Topology::TopologicalNode</span></code> object from the source CIM file.</p>
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.Node.bus_id">
+<code class="descname">bus_id</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.Node.bus_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A <a class="reference internal" href="Topology_BusBranch.html#Topology_BusBranch.Bus.id" title="Topology_BusBranch.Bus.id"><code class="xref py py-attr docutils literal"><span class="pre">Topology_BusBranch.Bus.id</span></code></a> (integer)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.Node.desc">
+<code class="descname">desc</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.Node.desc" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <code class="docutils literal"><span class="pre">description</span></code> attribute (string)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.Node.id">
+<code class="descname">id</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.Node.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>An autogenerated ID, subsequent numbering, starting from 1, (integer)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.Node.id_cim">
+<code class="descname">id_cim</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.Node.id_cim" title="Permalink to this definition">¶</a></dt>
+<dd><p>The unique <code class="docutils literal"><span class="pre">mRID</span></code> object identifier attribute (string)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.Node.name">
+<code class="descname">name</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.Node.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <code class="docutils literal"><span class="pre">name</span></code> attribute (string)</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Topology_NodeBreaker.PhaseTapChanger">
+<em class="property">class </em><code class="descclassname">Topology_NodeBreaker.</code><code class="descname">PhaseTapChanger</code><span class="sig-paren">(</span><em>branch_id</em>, <em>id_cim</em>, <em>step_num_list</em>, <em>x_pu_list</em>, <em>angle_shift_deg_list</em>, <em>continuous_position</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topology_NodeBreaker.html#PhaseTapChanger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Topology_NodeBreaker.PhaseTapChanger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Repsenets the basic info about a <code class="docutils literal"><span class="pre">IEC61970::Wires::PhaseTapChanger</span></code> object from the source CIM file.</p>
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.PhaseTapChanger.angle_shift_deg_list">
+<code class="descname">angle_shift_deg_list</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.PhaseTapChanger.angle_shift_deg_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of phase shifts [deg] for each corresponding step (list of floats)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.PhaseTapChanger.branch_id">
+<code class="descname">branch_id</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.PhaseTapChanger.branch_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A <code class="xref py py-attr docutils literal"><span class="pre">Topology_BusBranch.Branch.id`</span></code> (integer)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.PhaseTapChanger.continuous_position">
+<code class="descname">continuous_position</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.PhaseTapChanger.continuous_position" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <em>PhaseTapChanger</em>&#8216;s StateVariable <code class="docutils literal"><span class="pre">SvTapStep.continuousPosition</span></code> attribute, i.e. the actual step position (integer)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.PhaseTapChanger.id_cim">
+<code class="descname">id_cim</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.PhaseTapChanger.id_cim" title="Permalink to this definition">¶</a></dt>
+<dd><p>The unique <code class="docutils literal"><span class="pre">mRID</span></code> object identifier attribute (string)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.PhaseTapChanger.step_num_list">
+<code class="descname">step_num_list</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.PhaseTapChanger.step_num_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of the step numbers (list of subsequent string)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.PhaseTapChanger.x_pu_list">
+<code class="descname">x_pu_list</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.PhaseTapChanger.x_pu_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of reactances [p.u.] for each corresponding step  (list of floats)</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Topology_NodeBreaker.RatioTapChanger">
+<em class="property">class </em><code class="descclassname">Topology_NodeBreaker.</code><code class="descname">RatioTapChanger</code><span class="sig-paren">(</span><em>branch_id</em>, <em>id_cim</em>, <em>lowStep</em>, <em>highStep</em>, <em>neutralU_kV</em>, <em>stepVoltageIncrement_kV</em>, <em>continuousPosition</em>, <em>hasRegulatingControl</em>, <em>RC_discrete=[]</em>, <em>RC_mode=''</em>, <em>RC_targetRange_kV=[]</em>, <em>RC_targetValue_kV=[]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topology_NodeBreaker.html#RatioTapChanger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Topology_NodeBreaker.RatioTapChanger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Repsenets the basic info about a <code class="docutils literal"><span class="pre">IEC61970::Wires::RatioTapChanger</span></code> object from the source CIM file.</p>
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.RatioTapChanger.RC_discrete">
+<code class="descname">RC_discrete</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.RatioTapChanger.RC_discrete" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <code class="docutils literal"><span class="pre">RegulatingControl</span></code>&#8216;s <code class="docutils literal"><span class="pre">discrete</span></code> attribute (integer)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.RatioTapChanger.RC_mode">
+<code class="descname">RC_mode</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.RatioTapChanger.RC_mode" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <code class="docutils literal"><span class="pre">RegulatingControl</span></code>&#8216;s <code class="docutils literal"><span class="pre">mode</span></code> attribute (string)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.RatioTapChanger.RC_targetRange_kV">
+<code class="descname">RC_targetRange_kV</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.RatioTapChanger.RC_targetRange_kV" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <code class="docutils literal"><span class="pre">RegulatingControl</span></code>&#8216;s <code class="docutils literal"><span class="pre">targetRange</span></code> attribute (kV)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.RatioTapChanger.RC_targetValue_kV">
+<code class="descname">RC_targetValue_kV</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.RatioTapChanger.RC_targetValue_kV" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <code class="docutils literal"><span class="pre">RegulatingControl</span></code>&#8216;s <code class="docutils literal"><span class="pre">targetValue</span></code> attribute (kV)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.RatioTapChanger.branch_id">
+<code class="descname">branch_id</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.RatioTapChanger.branch_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A <code class="xref py py-attr docutils literal"><span class="pre">Topology_BusBranch.Branch.id`</span></code> (integer)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.RatioTapChanger.continuousPosition">
+<code class="descname">continuousPosition</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.RatioTapChanger.continuousPosition" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <em>RatioTapChanger</em>&#8216;s StateVariable <code class="docutils literal"><span class="pre">SvTapStep.continuousPosition</span></code> attribute, i.e. tap step voltage increment, per step position. (integer)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.RatioTapChanger.hasRegulatingControl">
+<code class="descname">hasRegulatingControl</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.RatioTapChanger.hasRegulatingControl" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <em>RatioTapChanger</em>&#8216;s <code class="docutils literal"><span class="pre">RegulatingControl</span></code> reference, false if unavailable (boolean)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.RatioTapChanger.highStep">
+<code class="descname">highStep</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.RatioTapChanger.highStep" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <code class="docutils literal"><span class="pre">highStep</span></code> attribute (inherited from: <code class="docutils literal"><span class="pre">TapChanger</span></code>), i.e. the highest possible tap step position, advance from neutral (integer)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.RatioTapChanger.id_cim">
+<code class="descname">id_cim</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.RatioTapChanger.id_cim" title="Permalink to this definition">¶</a></dt>
+<dd><p>The unique <code class="docutils literal"><span class="pre">mRID</span></code> object identifier attribute (string)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.RatioTapChanger.lowStep">
+<code class="descname">lowStep</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.RatioTapChanger.lowStep" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <code class="docutils literal"><span class="pre">lowStep</span></code> attribute (inherited from: <code class="docutils literal"><span class="pre">TapChanger</span></code>), i.e. the low step position number (integer)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.RatioTapChanger.neutralU_kV">
+<code class="descname">neutralU_kV</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.RatioTapChanger.neutralU_kV" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <code class="docutils literal"><span class="pre">neutralU</span></code> attribute (inherited from: <code class="docutils literal"><span class="pre">TapChanger</span></code>), i.e. voltage at which the winding operates at the neutral tap setting (kV)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.RatioTapChanger.stepVoltageIncrement_kV">
+<code class="descname">stepVoltageIncrement_kV</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.RatioTapChanger.stepVoltageIncrement_kV" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <code class="docutils literal"><span class="pre">stepVoltageIncrement</span></code> attribute (inherited from: <code class="docutils literal"><span class="pre">TapChanger</span></code>), i.e. tap step voltage increment, per step position. (kV)</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Topology_NodeBreaker.Shunt">
+<em class="property">class </em><code class="descclassname">Topology_NodeBreaker.</code><code class="descname">Shunt</code><span class="sig-paren">(</span><em>node_id</em>, <em>id_cim</em>, <em>maximumSections</em>, <em>numActiveSections</em>, <em>gPerSection_MVAr</em>, <em>bPerSection_MVAr</em>, <em>name=''</em>, <em>status=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topology_NodeBreaker.html#Shunt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Topology_NodeBreaker.Shunt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Repsenets the basic info about a <code class="docutils literal"><span class="pre">IEC61970::Wires::ShuntCompensator</span></code> object from the source CIM file.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The problem is that the Matpower mpc structure aggeregates all <em>Shunt</em>-s in the same bus. However if is
+useful to preserve the information about them (for example for switching actions) and this is why it
+is stored separately in this class.</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last"><code class="docutils literal"><span class="pre">IEC61970::Wires::SeriesCompensator</span></code> and <code class="docutils literal"><span class="pre">IEC61970::Wires::StaticVarCompensator</span></code> are not yet
+implemented! See the source code of <a class="reference internal" href="CIM2Matpower.html#CIM2Matpower.CIM2Matpower._create_buses_and_gens" title="CIM2Matpower.CIM2Matpower._create_buses_and_gens"><code class="xref py py-meth docutils literal"><span class="pre">CIM2Matpower.CIM2Matpower._create_buses_and_gens()</span></code></a> !</p>
+</div>
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.Shunt.bPerSection_MVAr">
+<code class="descname">bPerSection_MVAr</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.Shunt.bPerSection_MVAr" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <code class="docutils literal"><span class="pre">bPerSection</span></code> attribute, transformed MVAr injected at V = 1.0 p.u. as required by Matpower specifications</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.Shunt.gPerSection_MVAr">
+<code class="descname">gPerSection_MVAr</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.Shunt.gPerSection_MVAr" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <code class="docutils literal"><span class="pre">gPerSection</span></code> attribute, transformed MW demanded at V = 1.0 p.u. as required by Matpower specifications</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.Shunt.id_cim">
+<code class="descname">id_cim</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.Shunt.id_cim" title="Permalink to this definition">¶</a></dt>
+<dd><p>The unique <code class="docutils literal"><span class="pre">mRID</span></code> object identifier attribute (string)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.Shunt.maximumSections">
+<code class="descname">maximumSections</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.Shunt.maximumSections" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <code class="docutils literal"><span class="pre">maximumSections</span></code> attribute (integer)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.Shunt.name">
+<code class="descname">name</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.Shunt.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <code class="docutils literal"><span class="pre">name</span></code> attribute (string)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.Shunt.node_id">
+<code class="descname">node_id</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.Shunt.node_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A <code class="xref py py-attr docutils literal"><span class="pre">Topology_NodeBreaker.Node.id`</span></code> to which the <em>Shunt</em> is connected (integer)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.Shunt.numActiveSections">
+<code class="descname">numActiveSections</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.Shunt.numActiveSections" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <em>Shunt</em>&#8216;s StateVariable <code class="docutils literal"><span class="pre">SvShuntCompensatorSections.continuousSections</span></code> attribute, i.e. the number of switched ON sections (integer)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.Shunt.status">
+<code class="descname">status</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.Shunt.status" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <em>Shunt</em> terminal&#8217;s attribute <code class="docutils literal"><span class="pre">connected</span></code> (boolean)</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Topology_NodeBreaker.Substation">
+<em class="property">class </em><code class="descclassname">Topology_NodeBreaker.</code><code class="descname">Substation</code><span class="sig-paren">(</span><em>node_id_list</em>, <em>id_cim</em>, <em>name=''</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topology_NodeBreaker.html#Substation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Topology_NodeBreaker.Substation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Repsenets the basic info about a <code class="docutils literal"><span class="pre">IEC61970::Core::Substation</span></code> object from the source CIM file.</p>
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.Substation.id_cim">
+<code class="descname">id_cim</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.Substation.id_cim" title="Permalink to this definition">¶</a></dt>
+<dd><p>The unique <code class="docutils literal"><span class="pre">mRID</span></code> object identifier attribute (string)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.Substation.name">
+<code class="descname">name</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.Substation.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <code class="docutils literal"><span class="pre">name</span></code> attribute (string)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.Substation.node_id_list">
+<code class="descname">node_id_list</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.Substation.node_id_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of <code class="xref py py-attr docutils literal"><span class="pre">Topology_NodeBreaker.Node.id`</span></code>-s within the substation (integers)</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Topology_NodeBreaker.Switch">
+<em class="property">class </em><code class="descclassname">Topology_NodeBreaker.</code><code class="descname">Switch</code><span class="sig-paren">(</span><em>node_from_id</em>, <em>node_to_id</em>, <em>id_cim</em>, <em>name=''</em>, <em>status=False</em>, <em>branch_id=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topology_NodeBreaker.html#Switch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Topology_NodeBreaker.Switch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Repsenets the basic info about a <code class="docutils literal"><span class="pre">IEC61970::Wires::Switch</span></code> object from the source CIM file.</p>
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.Switch.branch_id">
+<code class="descname">branch_id</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.Switch.branch_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A <code class="xref py py-attr docutils literal"><span class="pre">Topology_BusBranch.Branch.id</span></code> (integer)</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This property only reserves place. The Matpower case, which comes out of this import tool is a <em>BusBranch</em> model,
+therefore it should not have branches representing <em>Switch</em>-es. However, it the created in Matlab function <code class="docutils literal"><span class="pre">mpc_bb2nodal.m</span></code>
+is called, it creates a NodeBreaker model by adding the <em>Switch</em>-es as low impedence <em>Branch</em>-es and stores the
+<code class="xref py py-attr docutils literal"><span class="pre">Topology_BusBranch.Branch.id</span></code> for the opposite transformation. This information is also necessary
+when switching actions are to be performed.</p>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.Switch.id_cim">
+<code class="descname">id_cim</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.Switch.id_cim" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <code class="docutils literal"><span class="pre">name</span></code> attribute (string)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.Switch.name">
+<code class="descname">name</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.Switch.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <code class="docutils literal"><span class="pre">name</span></code> attribute (string)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.Switch.node_from_id">
+<code class="descname">node_from_id</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.Switch.node_from_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A <a class="reference internal" href="#Topology_NodeBreaker.Node.id" title="Topology_NodeBreaker.Node.id"><code class="xref py py-attr docutils literal"><span class="pre">Topology_NodeBreaker.Node.id</span></code></a> on Terminal 0 (integer)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.Switch.node_to_id">
+<code class="descname">node_to_id</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.Switch.node_to_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A <a class="reference internal" href="#Topology_NodeBreaker.Node.id" title="Topology_NodeBreaker.Node.id"><code class="xref py py-attr docutils literal"><span class="pre">Topology_NodeBreaker.Node.id</span></code></a> on Terminal 1 (integer)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.Switch.status">
+<code class="descname">status</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.Switch.status" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <em>Swtich</em> status (Open or Closed), i.e. False if either of the <em>Swtich</em> terminal&#8217;s attribute <code class="docutils literal"><span class="pre">connected</span></code> is False. (boolean)</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Topology_NodeBreaker.Topology_NodeBreaker">
+<em class="property">class </em><code class="descclassname">Topology_NodeBreaker.</code><code class="descname">Topology_NodeBreaker</code><span class="sig-paren">(</span><em>CIM_filenames</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topology_NodeBreaker.html#Topology_NodeBreaker"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Topology_NodeBreaker.Topology_NodeBreaker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Additional data from the CIM files about the NodeBreaker topology of the system</p>
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.Topology_NodeBreaker.CIM_filenames">
+<code class="descname">CIM_filenames</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.Topology_NodeBreaker.CIM_filenames" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of the CIM files which were passed to <code class="xref py py-meth docutils literal"><span class="pre">CIM2Matpower.import()</span></code> (list if string)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.Topology_NodeBreaker.areas">
+<code class="descname">areas</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.Topology_NodeBreaker.areas" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of all <a class="reference internal" href="#Topology_NodeBreaker.Area" title="Topology_NodeBreaker.Area"><code class="xref py py-class docutils literal"><span class="pre">Area</span></code></a>-s within the imported CIM files.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.Topology_NodeBreaker.branches">
+<code class="descname">branches</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.Topology_NodeBreaker.branches" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of all <a class="reference internal" href="#Topology_NodeBreaker.Branch" title="Topology_NodeBreaker.Branch"><code class="xref py py-class docutils literal"><span class="pre">Topology_NodeBreaker.Branch</span></code></a>-es within the biggest <code class="docutils literal"><span class="pre">TopologicalIsland</span></code> of the imported power system.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.Topology_NodeBreaker.generators">
+<code class="descname">generators</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.Topology_NodeBreaker.generators" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of all <a class="reference internal" href="#Topology_NodeBreaker.Generator" title="Topology_NodeBreaker.Generator"><code class="xref py py-class docutils literal"><span class="pre">Topology_NodeBreaker.Generator</span></code></a>-es within the biggest <code class="docutils literal"><span class="pre">TopologicalIsland</span></code> of the imported power system.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.Topology_NodeBreaker.loads">
+<code class="descname">loads</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.Topology_NodeBreaker.loads" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of all <a class="reference internal" href="#Topology_NodeBreaker.Load" title="Topology_NodeBreaker.Load"><code class="xref py py-class docutils literal"><span class="pre">Topology_NodeBreaker.Load</span></code></a>-es within the biggest <code class="docutils literal"><span class="pre">TopologicalIsland</span></code> of the imported power system.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.Topology_NodeBreaker.nodes">
+<code class="descname">nodes</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.Topology_NodeBreaker.nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of <a class="reference internal" href="#Topology_NodeBreaker.Node" title="Topology_NodeBreaker.Node"><code class="xref py py-class docutils literal"><span class="pre">Node</span></code></a>-s within the biggest <code class="docutils literal"><span class="pre">TopologicalIsland</span></code> of the imported power system.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.Topology_NodeBreaker.phasetapchangers">
+<code class="descname">phasetapchangers</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.Topology_NodeBreaker.phasetapchangers" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of all <a class="reference internal" href="#Topology_NodeBreaker.PhaseTapChanger" title="Topology_NodeBreaker.PhaseTapChanger"><code class="xref py py-class docutils literal"><span class="pre">Topology_NodeBreaker.PhaseTapChanger</span></code></a>-s within the biggest <code class="docutils literal"><span class="pre">TopologicalIsland</span></code> of the imported power system.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.Topology_NodeBreaker.ratiotapchangers">
+<code class="descname">ratiotapchangers</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.Topology_NodeBreaker.ratiotapchangers" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of all <a class="reference internal" href="#Topology_NodeBreaker.RatioTapChanger" title="Topology_NodeBreaker.RatioTapChanger"><code class="xref py py-class docutils literal"><span class="pre">Topology_NodeBreaker.RatioTapChanger</span></code></a>-s within the biggest <code class="docutils literal"><span class="pre">TopologicalIsland</span></code> of the imported power system.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.Topology_NodeBreaker.shunts">
+<code class="descname">shunts</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.Topology_NodeBreaker.shunts" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of all <a class="reference internal" href="#Topology_NodeBreaker.Shunt" title="Topology_NodeBreaker.Shunt"><code class="xref py py-class docutils literal"><span class="pre">Topology_NodeBreaker.Shunt</span></code></a>-es within the biggest <code class="docutils literal"><span class="pre">TopologicalIsland</span></code> of the imported power system.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.Topology_NodeBreaker.substations">
+<code class="descname">substations</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.Topology_NodeBreaker.substations" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of <a class="reference internal" href="#Topology_NodeBreaker.Substation" title="Topology_NodeBreaker.Substation"><code class="xref py py-class docutils literal"><span class="pre">Topology_NodeBreaker.Substation</span></code></a>-s within the biggest <code class="docutils literal"><span class="pre">TopologicalIsland</span></code> of the imported power system.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.Topology_NodeBreaker.switches">
+<code class="descname">switches</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.Topology_NodeBreaker.switches" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of all <a class="reference internal" href="#Topology_NodeBreaker.Switch" title="Topology_NodeBreaker.Switch"><code class="xref py py-class docutils literal"><span class="pre">Topology_NodeBreaker.Switch</span></code></a>-es within the biggest <code class="docutils literal"><span class="pre">TopologicalIsland</span></code> of the imported power system.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.Topology_NodeBreaker.zones">
+<code class="descname">zones</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.Topology_NodeBreaker.zones" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of all <a class="reference internal" href="#Topology_NodeBreaker.Zone" title="Topology_NodeBreaker.Zone"><code class="xref py py-class docutils literal"><span class="pre">Topology_NodeBreaker.Zone</span></code></a>-s within the imported CIM files.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Topology_NodeBreaker.Zone">
+<em class="property">class </em><code class="descclassname">Topology_NodeBreaker.</code><code class="descname">Zone</code><span class="sig-paren">(</span><em>id_cim</em>, <em>name=''</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topology_NodeBreaker.html#Zone"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Topology_NodeBreaker.Zone" title="Permalink to this definition">¶</a></dt>
+<dd><p>Repsenets the basic info about a <code class="docutils literal"><span class="pre">IEC61970::LoadModel::LoadArea</span></code> object from the source CIM file.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">The current implementation of the <a class="reference internal" href="CIM2Matpower.html#CIM2Matpower.CIM2Matpower._iterate_prim_eq" title="CIM2Matpower.CIM2Matpower._iterate_prim_eq"><code class="xref py py-meth docutils literal"><span class="pre">CIM2Matpower.CIM2Matpower._iterate_prim_eq()</span></code></a> is fine tuned
+for the RTE CIM data in which there is no <code class="docutils literal"><span class="pre">IEC61970::LoadModel::LoadArea</span></code> objects and because of that instead
+the <code class="docutils literal"><span class="pre">IEC61970::Core::SubGeographicalRegion</span></code> objects are treated as load <em>Zone</em>-s.</p>
+</div>
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.Zone.id">
+<code class="descname">id</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.Zone.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>An autogenerated ID, subsequent numbering, starting from 1, (integer)</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This ID goes in the Matpower <code class="docutils literal"><span class="pre">mpc.bus(:,ZONE)</span> <span class="pre">struct</span> <span class="pre">field.</span></code></p>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.Zone.id_cim">
+<code class="descname">id_cim</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.Zone.id_cim" title="Permalink to this definition">¶</a></dt>
+<dd><p>The unique <code class="docutils literal"><span class="pre">mRID</span></code> object identifier attribute (string)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Topology_NodeBreaker.Zone.name">
+<code class="descname">name</code><em class="property"> = None</em><a class="headerlink" href="#Topology_NodeBreaker.Zone.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <code class="docutils literal"><span class="pre">name</span></code> attribute (string)</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="Topology_BusBranch.html"
+                        title="previous chapter">Topology_BusBranch module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="CIM2Matpower.html"
+                        title="next chapter">CIM2Matpower module</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/Topology_NodeBreaker.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="CIM2Matpower.html" title="CIM2Matpower module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Topology_BusBranch.html" title="Topology_BusBranch module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">CIM2Matpower 160513 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="source_code_doc.html" >Source code documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, Konstantin Gerasimov.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
+    </div>
+  </body>
+</html>
