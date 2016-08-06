@@ -1,0 +1,45 @@
+.. CIM2Matpower documentation master file, created by
+   sphinx-quickstart on Fri May 13 11:54:19 2016.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
+
+Welcome to CIM2Matpower's documentation!
+========================================
+
+Documenation of the CIM2Matpower Python package.
+
+:Date: 2016-05-10
+:Authors: Konstantin Gerasimov
+:e-mail: kkgerasimov@gmail.com
+:Credits: Created for KU-Leuven as part of the GARPUR project http://www.garpur-project.eu
+
+.. note:: The packages are tested against Python 2.7
+
+.. note:: For refenrece to the CIMv14 standard see "EN 61970-301-2013-05 Energy Management System Application Program Interface (EMS-API). Part 301 Common Information Model (CIM) base" and "EN 61970-452-2013-07 Energy Management System Application Program Interface (EMS-API). Part 452 CIM Static transmission network model profiles". Their drafts are freely available (after free registration) in the CIM User Group website http://cimug.ucaiug.org/default.aspx . Again from the CIM User Group you can also download the UML design files and view them with the freely available viewer  http://www.sparxsystems.eu/enterprisearchitect/ea-lite-edition/ 
+
+.. note:: The PyCIM package's latest reporitory is available at https://github.com/rwl/PyCIM (last changed on 20 May 2016)
+
+.. note:: The CIM2Matpower Python package was developed by using parts of the code of the Cim2BusBranch package, available at https://pypi.python.org/pypi/Cim2BusBranch/0.1 
+
+
+.. toctree::
+   :caption: Table of Contents
+   :name: mastertoc
+   :maxdepth: 2
+
+   Introduction
+   Dependencies
+   Algorithm
+   
+   source_code_doc
+   
+   matlab_files
+   
+   
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
+

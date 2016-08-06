@@ -1,0 +1,114 @@
+Matlab files
+=============
+
++tsm.+fileformats.cim_read()
+-----------------------------------------------------------------------
+
+CIM_READ Reads CIM (Common Information Model, IEC 61970) XML files and creates a Matpower case (mpc) case file as BusBreaker model, but also containing information about the NodeBreaker topology.
+
+:Date: 2016-05-10
+:Authors: Konstantin Gerasimov
+:e-mail: kkgerasimov@gmail.com
+:Credits: This function is created for KU-Leuven as part of the GARPUR project http://www.garpur-project.eu
+
+.. warning:: Currently only CIMv14 is supported!
+
+.. warning:: The CIM files and the boundary profiles must not contain
+    Unicode characters because then the PyCIM parser fails.
+	
+.. warning:: Despite what the Matlab documentation says, if you change the Python source code files, you must restart Matlab!
+
+.. note:: The import is implemented through the specially developed for the
+    GARPUR project Python package CIM2Matpower which utilizes the open
+    source PyCIM Python package for parsing CIM files.
+	
+.. note:: The created in the frames of the GARPUR project software
+    quantification platform prototype is tested with CIM data provided
+    by the French TSO RTE. Their files have some peculiarities which
+    differ from the CIMv14 standard. In order to cope with that, some 
+    changes are made directly to the original RTE CIM files by calling
+    explicitly the Python function "fix_RTE_cim_files", specially
+    developed for this purpose. However, if the "fix_RTE_cim_files"
+    function is called on regular CIMv14 files, it will not change them.
+    Irrelevant of whether changes are made or not to the original CIM
+    files, "fix_RTE_cim_files" always leaves XML comments at the end of
+    the file.
+
+:param cim_files: cell array of stings (usually they come in three files: _EQ, _TP and _SV) of the filenames of the CIM files to be imported (preferably with full path).
+.. note:: If "cim_read" is called with no arguments or if "cim_files" is 
+        set to empty string, then a dialogue will open to select 
+        interactively the CIM files. If user hits Cancel, then "cim_read"
+        is terminated and an empty matrix is returned.
+:param boundary_profiles: cell array of stings (usually they come in two files: _EQ and _TP) of the filenames of the CIM boundary profiles (preferably with full path). 
+.. note:: If "cim_read" is called with 1 or 0 arguments, a dialogue will 
+        open to select the CIM boundary profiles interactively.
+        If "boundary_profiles" is set to empty matrix [] or empty 
+        string '' or if user hits Cancel on the interactive file 
+        selection, then NO boundary profiles are parsed.
+		
+:param log_filename: string of the filename (preferably with full 
+        path) of the log file, which will contain information from the 
+        Python code about the CIM import.
+.. note:: If "cim_read" is called with 2 or less arguments, a dialogue 
+        will open to select the log file name interactively.
+        If "log_filename" is set to empty matrix [] or empty string ''
+        or if user hits Cancel on the interactive file selection,
+        then NO log file will be saved.
+
+:return mpc_bb: a Matpower case struct (mpc) which is a BusBreaker model, 
+        containing also a field NodeBreaker_topology which preserves
+        the information from the CIM that cannot be imported in the
+        standard mpc structure but is relevant for the creation of 
+        NodeBreaker model.
+
+.. seealso: MPC_NODAL2BB, MPC_BB2NODAL and the Python package CIM2Matpower
+
+
+
++tsm.+fileformats.cim_bb2nodal()
+-----------------------------------------------------------------------
+MPC_BB2NODAL Transforms the Matpower case (mpc) file from BusBreaker to NodeBranch topology (based on the data from the original CIM files).
+
+The NodeBreaker topology means that switches and breakers are 
+represented as low-impedence branches. This model is used for 
+optimization of switching actions (in the GARPUR project this is 
+implemented in AMPL). However, sometimes the low-impedences might
+cause the admittance matrix of the mpc to be ill conditioned and
+thus the AC powerflow will not converge or will give wrong results.
+In order to cope with this problem, MPC_NODAL2BB function can be 
+used to translate back the NodeBreaker to BusBranch model. 
+
+:Date: 2016-05-10
+:Authors: Konstantin Gerasimov
+:e-mail: kkgerasimov@gmail.com
+:Credits: This function is created for KU-Leuven as part of the GARPUR project http://www.garpur-project.eu
+
+:param mpc_bb: mpc which is a BusBranch model. 
+:return mpc_nodal: mpc which is a NodeBranch model.
+
+.. seealso: MPC_NODAL2BB, CIM_READ
+
+
+
++tsm.+fileformats.cim_nodal2bb()
+-----------------------------------------------------------------------
+MPC_NODAL2BB Transforms the Matpower case (mpc) file from NodeBreaker to BusBranch topology (based on the data from the original CIM files).
+
+The NodeBreaker topology means that switches and breakers are 
+represented as low-impedence branches. This model is used for 
+optimization of switching actions (in the GARPUR project this is 
+implemented in AMPL). However, sometimes the low-impedences might
+cause the admittance matrix of the mpc to be ill conditioned and
+thus the AC powerflow will not converge or will give wrong results.
+In order to cope with this problem, this function can be used to
+translate back the NodeBreaker to BusBranch model. 
+
+:Date: 2016-05-10
+:Authors: Konstantin Gerasimov
+:e-mail: kkgerasimov@gmail.com
+:Credits: This function is created for KU-Leuven as part of the GARPUR project http://www.garpur-project.eu
+
+:param mpc_nodal_ORIGINAL: mpc which is a NodeBreaker model. 
+:return mpc_bb: mpc which is a BusBranch model. 
+
+.. seealso: MPC_BB2NODAL, CIM_READ

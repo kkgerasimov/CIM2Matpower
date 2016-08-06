@@ -1,0 +1,7 @@
+PreProcess_CIM_files module
+--------------------------------------
+
+.. automodule:: PreProcess_CIM_files
+	:members:
+	:undoc-members:
+	:private-members:

@@ -1,0 +1,13 @@
+Introduction
+=======================================
+
+:Date: 2016-05-10
+:Authors: Konstantin Gerasimov
+:e-mail: kkgerasimov@gmail.com
+:Credits: Created for KU-Leuven as part of the GARPUR project http://www.garpur-project.eu
+
+.. note:: The CIM2Matpower Python package was developed by using parts of the code of the Cim2BusBranch package, available at https://pypi.python.org/pypi/Cim2BusBranch/0.1 
+
+The CIM2Matpower is a Python package. Within the GARPUR project it is called from Matlab to transform the CIMv14 ENTSO-E profile ot transmission system network to Matpower case structure (mpc). The mpc is in BusBranch model, however additional information about the NodeBreaker topology is also imported, making it possible to transformer the mpc from on to the other model type with additionally provided functions (for example for optimization with switching actions).
+
+However, one should keep in mind that it is fine tuned for the RTE (the French Transmission System Operator) CIMv14 export tool.
