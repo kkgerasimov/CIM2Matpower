@@ -1,0 +1,453 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Topology_BusBranch &mdash; CIM2Matpower 160513 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '160513',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="CIM2Matpower 160513 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CIM2Matpower 160513 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for Topology_BusBranch</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This module contains definitions of classes to represent an object oriented structure of a Matpower case file.</span>
+
+<span class="sd">.. note::This module is based mostly on the the started but never finished OpenSource project Cim2BusBranch https://www.versioneye.com/Python/Cim2BusBranch/0.1</span>
+
+<span class="sd">.. seealso::  :py:mod:`Topology_NodeBreaker` and :py:mod:`CIM2Matpower`</span>
+
+<span class="sd">:Date: 2016-05-10</span>
+<span class="sd">:Authors: Konstantin Gerasimov</span>
+<span class="sd">:e-mail: kkgerasimov@gmail.com</span>
+<span class="sd">:Credits: This function is created for KU-Leuven as part of the GARPUR project http://www.garpur-project.eu</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<span class="kn">import</span> <span class="nn">collections</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">count</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
+<span class="c1"># logger = logging.getLogger(&#39;CIM2Matpower&#39;)</span>
+
+<span class="n">bus_type</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">namedtuple</span><span class="p">(</span><span class="s1">&#39;BusType&#39;</span><span class="p">,</span> <span class="s1">&#39;PQ, PV, REF, ISOLATED&#39;</span><span class="p">)(</span>
+    <span class="n">PQ</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">PV</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">REF</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+    <span class="n">ISOLATED</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="sd">&quot;&quot;&quot;Defines the Matpower BUS_TYPE constants&quot;&quot;&quot;</span>
+
+<span class="n">Point</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">namedtuple</span><span class="p">(</span><span class="s1">&#39;Point&#39;</span><span class="p">,</span> <span class="s1">&#39;x, y&#39;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="Bus"><a class="viewcode-back" href="../Topology_BusBranch.html#Topology_BusBranch.Bus">[docs]</a><span class="k">class</span> <span class="nc">Bus</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A *Bus* represents a node in a bus/branch network graph.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">id_generator</span> <span class="o">=</span> <span class="n">count</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">btype</span><span class="o">=</span><span class="n">bus_type</span><span class="o">.</span><span class="n">PQ</span><span class="p">,</span> <span class="n">pd</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">qd</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span>
+                 <span class="n">base_kv</span><span class="o">=</span><span class="mf">100.</span><span class="p">,</span> <span class="n">vm</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">vm_max</span><span class="o">=</span><span class="mf">1.1</span><span class="p">,</span> <span class="n">vm_min</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span>
+                 <span class="n">gs</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">bs</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">area</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">zone</span><span class="o">=</span><span class="mi">1</span><span class="p">,):</span>  <span class="c1"># cim_classes=None, pos=None):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id_generator</span><span class="p">)</span>
+        <span class="sd">&quot;&quot;&quot;Autogenerated ID (subsequent numbering, starting from 1)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span> <span class="k">if</span> <span class="n">name</span> <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="nb">id</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+        <span class="sd">&quot;&quot;&quot;Bus name&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">btype</span> <span class="o">=</span> <span class="n">btype</span>
+        <span class="sd">&quot;&quot;&quot;Bus type (One of these attributes of :obj:`bus_type`:</span>
+<span class="sd">           *PQ*, *PV*, *REF*, *ISOLATED*)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">pd</span> <span class="o">=</span> <span class="n">pd</span>
+        <span class="sd">&quot;&quot;&quot;Active power demand (MW)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">qd</span> <span class="o">=</span> <span class="n">qd</span>
+        <span class="sd">&quot;&quot;&quot;Reactive power demand (MVAr)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_kv</span> <span class="o">=</span> <span class="n">base_kv</span>
+        <span class="sd">&quot;&quot;&quot;Base voltage (kV)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">vm</span> <span class="o">=</span> <span class="n">vm</span>
+        <span class="sd">&quot;&quot;&quot;Voltage magnitude (p.u.)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">va</span> <span class="o">=</span> <span class="n">va</span>
+        <span class="sd">&quot;&quot;&quot;Voltage angle (degrees)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">vm_max</span> <span class="o">=</span> <span class="n">vm_max</span>
+        <span class="sd">&quot;&quot;&quot;maximum voltage magnitude (p.u.)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">vm_min</span> <span class="o">=</span> <span class="n">vm_min</span>
+        <span class="sd">&quot;&quot;&quot;minimum voltage magnitude (p.u.)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">gs</span> <span class="o">=</span> <span class="n">gs</span>
+        <span class="sd">&quot;&quot;&quot;Shunt conductance (MVAr injected at V = 1. p.u.)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">bs</span> <span class="o">=</span> <span class="n">bs</span>
+        <span class="sd">&quot;&quot;&quot;Shunt susceptance (MVAr injected at V = 1. p.u.)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">area</span> <span class="o">=</span> <span class="n">area</span>
+        <span class="sd">&quot;&quot;&quot;Area number (positive integer)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">zone</span> <span class="o">=</span> <span class="n">zone</span>
+        <span class="sd">&quot;&quot;&quot;Loss zone (positive integer)&quot;&quot;&quot;</span>
+
+        <span class="c1"># self.cim_classes = cim_classes if cim_classes else []</span>
+        <span class="c1"># &quot;&quot;&quot;Classes of CIM components that were connected to this bus.&quot;&quot;&quot;</span>
+        <span class="c1">#</span>
+        <span class="c1"># self.pos = pos</span>
+        <span class="c1"># &quot;&quot;&quot;Set of position points (x, y) of that bus.&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pd_orig</span> <span class="o">=</span> <span class="n">pd</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_qd_orig</span> <span class="o">=</span> <span class="n">qd</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">pd_orig</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The value of ``self.pd`` when the instance was created.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pd_orig</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">qd_orig</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The value of ``self.qd`` when the instance was created.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_qd_orig</span>
+
+<div class="viewcode-block" id="Bus.reset"><a class="viewcode-back" href="../Topology_BusBranch.html#Topology_BusBranch.Bus.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Resets ``self.pd`` and ``self.qd`` to their original values (that they</span>
+<span class="sd">        had when the instance was created).</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pd_orig</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_qd_orig</span></div>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">(name=</span><span class="si">%-6s</span><span class="s1">, btype=</span><span class="si">%d</span><span class="s1">, pd=</span><span class="si">%7.3f</span><span class="s1">, qd=</span><span class="si">%7.3f</span><span class="s1">, &#39;</span>
+                <span class="s1">&#39;vm=</span><span class="si">%.3f</span><span class="s1">, va=</span><span class="si">%+.3f</span><span class="s1">)&#39;</span><span class="p">)</span> <span class="o">%</span> <span class="p">(</span>
+            <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__name__</span><span class="p">,</span>
+            <span class="s2">&quot;&#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">btype</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pd</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">qd</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">vm</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">va</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Generator"><a class="viewcode-back" href="../Topology_BusBranch.html#Topology_BusBranch.Generator">[docs]</a><span class="k">class</span> <span class="nc">Generator</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A *Generator* can be attached to a :class:`Bus`.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bus</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">pg</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">qg</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">pg_min</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">pg_max</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span>
+            <span class="n">qg_min</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">qg_max</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">vg</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">base_mva</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">online</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+            <span class="n">pc1</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">pc2</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">qc1_min</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">qc1_max</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">qc2_min</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">qc2_max</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span>
+            <span class="n">ramp_agc</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">ramp_10</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">ramp_30</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">ramp_q</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">apf</span><span class="o">=</span><span class="mf">0.</span><span class="p">,):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">bus</span> <span class="o">=</span> <span class="n">bus</span>
+        <span class="sd">&quot;&quot;&quot;Reference to the bus the generator is connected to&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span> <span class="k">if</span> <span class="n">name</span> <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="nb">id</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+        <span class="sd">&quot;&quot;&quot;Generator name&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">pg</span> <span class="o">=</span> <span class="n">pg</span>
+        <span class="sd">&quot;&quot;&quot;Real power output (MW)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">qg</span> <span class="o">=</span> <span class="n">qg</span>
+        <span class="sd">&quot;&quot;&quot;Reactive power output (MVAr)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">pg_min</span> <span class="o">=</span> <span class="n">pg_min</span>
+        <span class="sd">&quot;&quot;&quot;Minimum real power output (MW)&quot;&quot;&quot;</span>
+
+        <span class="c1"># Only raise an error if pg_max was provided by the user</span>
+        <span class="k">if</span> <span class="mf">0.0</span> <span class="o">&lt;</span> <span class="n">pg_max</span> <span class="o">&lt;</span> <span class="n">pg</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Generator </span><span class="si">%s</span><span class="s1">: pg_max must be &gt;= pg, but </span><span class="si">%f</span><span class="s1"> &lt; </span><span class="si">%f</span><span class="s1">&#39;</span> <span class="o">%</span>
+                    <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span><span class="n">pg_max</span><span class="p">,</span> <span class="n">pg</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pg_max</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">pg_max</span><span class="p">,</span> <span class="n">pg</span><span class="p">)</span>  <span class="c1"># enforce pg_max &gt;= pg</span>
+        <span class="sd">&quot;&quot;&quot;Maximum real power output (MW)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">qg_min</span> <span class="o">=</span> <span class="n">qg_min</span>
+        <span class="sd">&quot;&quot;&quot;Minimum reactive power output at Pc1 (MVAr)&quot;&quot;&quot;</span>
+
+        <span class="c1"># Only raise an error if qg_max was provided by the user</span>
+        <span class="k">if</span> <span class="mf">0.0</span> <span class="o">&lt;</span> <span class="n">qg_max</span> <span class="o">&lt;</span> <span class="n">qg</span><span class="p">:</span>
+            <span class="c1"># raise ValueError(&#39;Generator %s: qg_max must be &gt;= qg, but %f &lt; %f&#39; %</span>
+            <span class="c1">#         (self.name,qg_max, qg))</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Generator </span><span class="si">%s</span><span class="s1">: qg_max must be &gt;= qg, but </span><span class="si">%f</span><span class="s1"> &lt; </span><span class="si">%f</span><span class="s1">&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">qg_max</span><span class="p">,</span> <span class="n">qg</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qg_max</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">qg_max</span><span class="p">,</span> <span class="n">qg</span><span class="p">)</span>  <span class="c1"># enforce qg_max &gt;= qg</span>
+        <span class="sd">&quot;&quot;&quot;Maximum reactive power output at Pc1 (MVAr)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">vg</span> <span class="o">=</span> <span class="n">vg</span>
+        <span class="sd">&quot;&quot;&quot;Voltage magnitude setpoint (p.u.)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_mva</span> <span class="o">=</span> <span class="n">base_mva</span>
+        <span class="sd">&quot;&quot;&quot;Total MVA base of this machine, defaults to baseMVA&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">online</span> <span class="o">=</span> <span class="n">online</span>
+        <span class="sd">&quot;&quot;&quot;Status (machine in service (True) or out of service (False))&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">pc1</span> <span class="o">=</span> <span class="n">pc1</span>
+        <span class="sd">&quot;&quot;&quot;Lower real power output of PQ capability curve (MW)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">pc2</span> <span class="o">=</span> <span class="n">pc2</span>
+        <span class="sd">&quot;&quot;&quot;Upper real power output of PQ capability curve (MW)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">qc1_min</span> <span class="o">=</span> <span class="n">qc1_min</span>
+        <span class="sd">&quot;&quot;&quot;Minimum reactive power output at Pc1 (MVAr)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">qc1_max</span> <span class="o">=</span> <span class="n">qc1_max</span>
+        <span class="sd">&quot;&quot;&quot;Maximum reactive power output at Pc1 (MVAr)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">qc2_min</span> <span class="o">=</span> <span class="n">qc2_min</span>
+        <span class="sd">&quot;&quot;&quot;Minimum reactive power output at Pc2 (MVAr)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">qc2_max</span> <span class="o">=</span> <span class="n">qc2_max</span>
+        <span class="sd">&quot;&quot;&quot;Maximum reactive power output at Pc2 (MVAr)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ramp_agc</span> <span class="o">=</span> <span class="n">ramp_agc</span>
+        <span class="sd">&quot;&quot;&quot;Ramp rate for load following/AGC (MW/min)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ramp_10</span> <span class="o">=</span> <span class="n">ramp_10</span>
+        <span class="sd">&quot;&quot;&quot;Ramp rate for 10 minute reserves (MW)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ramp_30</span> <span class="o">=</span> <span class="n">ramp_30</span>
+        <span class="sd">&quot;&quot;&quot;Ramp rate for 30 minute reserves (MW)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ramp_q</span> <span class="o">=</span> <span class="n">ramp_q</span>
+        <span class="sd">&quot;&quot;&quot;Ramp rate for reactive power (2 sec timescale) (MVAr/min)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">apf</span> <span class="o">=</span> <span class="n">apf</span>
+        <span class="sd">&quot;&quot;&quot;APF, area participation factor&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pg_orig</span> <span class="o">=</span> <span class="n">pg</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_qg_orig</span> <span class="o">=</span> <span class="n">qg</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">pg_orig</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The value of ``self.pg`` when the instance was created.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pg_orig</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">qg_orig</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The value of ``self.qg`` when the instance was created.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_qg_orig</span>
+
+<div class="viewcode-block" id="Generator.reset"><a class="viewcode-back" href="../Topology_BusBranch.html#Topology_BusBranch.Generator.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Resets ``self.pg`` and ``self.qg`` to their original values (that they</span>
+<span class="sd">        had when the instance was created).</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pg_orig</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_qg_orig</span></div>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">(name=</span><span class="si">%-6s</span><span class="s1">, bus=</span><span class="si">%-6s</span><span class="s1">, pg=</span><span class="si">%7.3f</span><span class="s1">, qg=</span><span class="si">%7.3f</span><span class="s1">)&#39;</span><span class="p">)</span> <span class="o">%</span> <span class="p">(</span>
+            <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__name__</span><span class="p">,</span>
+            <span class="s2">&quot;&#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="s2">&quot;&#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">bus</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pg</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">qg</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Branch"><a class="viewcode-back" href="../Topology_BusBranch.html#Topology_BusBranch.Branch">[docs]</a><span class="k">class</span> <span class="nc">Branch</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A *Branch* represents a vertex in a Bus/Branch network.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">from_bus</span><span class="p">,</span> <span class="n">to_bus</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span>
+            <span class="n">rate_a</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">rate_b</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">rate_c</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">ratio</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">angle</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span>
+            <span class="n">angle_min</span><span class="o">=-</span><span class="mf">360.</span><span class="p">,</span> <span class="n">angle_max</span><span class="o">=</span><span class="mf">360.</span><span class="p">,</span> <span class="n">online</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+            <span class="n">p_from</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">q_from</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">p_to</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">q_to</span><span class="o">=</span><span class="mf">0.</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">from_bus</span> <span class="o">=</span> <span class="n">from_bus</span>
+        <span class="sd">&quot;&quot;&quot;Reference to the bus on the from-side&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">to_bus</span> <span class="o">=</span> <span class="n">to_bus</span>
+        <span class="sd">&quot;&quot;&quot;Reference to the bus on the to-side&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span> <span class="k">if</span> <span class="n">name</span> <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="nb">id</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+        <span class="sd">&quot;&quot;&quot;Branch name&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">r</span> <span class="o">=</span> <span class="n">r</span>
+        <span class="sd">&quot;&quot;&quot;Resistance (p.u.)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
+        <span class="sd">&quot;&quot;&quot;Reactance (p.u.)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">b</span>
+        <span class="sd">&quot;&quot;&quot;Total line charging susceptance (p.u.)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">rate_a</span> <span class="o">=</span> <span class="n">rate_a</span>
+        <span class="sd">&quot;&quot;&quot;MVA rating A (long term rating)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">rate_b</span> <span class="o">=</span> <span class="n">rate_b</span>
+        <span class="sd">&quot;&quot;&quot;MVA rating B (short term rating)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">rate_c</span> <span class="o">=</span> <span class="n">rate_c</span>
+        <span class="sd">&quot;&quot;&quot;MVA rating C (emergency rating)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ratio</span> <span class="o">=</span> <span class="n">ratio</span>
+        <span class="sd">&quot;&quot;&quot;Transformer off nominal turns ratio (=0 for lines)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">angle</span> <span class="o">=</span> <span class="n">angle</span>
+        <span class="sd">&quot;&quot;&quot;Transformer phase shift angle (degree, positive =&gt; delay)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">angle_min</span> <span class="o">=</span> <span class="n">angle_min</span>
+        <span class="sd">&quot;&quot;&quot;Minimum angle difference between both ends</span>
+<span class="sd">           (from_bus.va - to_bus.va) (degree)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">angle_max</span> <span class="o">=</span> <span class="n">angle_max</span>
+        <span class="sd">&quot;&quot;&quot;Maximum angle difference between both ends</span>
+<span class="sd">           (from_bus.va - to_bus.va) (degree)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">online</span> <span class="o">=</span> <span class="n">online</span>
+        <span class="sd">&quot;&quot;&quot;Initial branch status (in service (True) or</span>
+<span class="sd">           out of service (False))&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">p_from</span> <span class="o">=</span> <span class="n">p_from</span>
+        <span class="sd">&quot;&quot;&quot;Real power injected at &quot;from&quot; bus end (MW)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">q_from</span> <span class="o">=</span> <span class="n">q_from</span>
+        <span class="sd">&quot;&quot;&quot;Reactive power injected at &quot;from&quot; bus end (MVAr)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">p_to</span> <span class="o">=</span> <span class="n">p_to</span>
+        <span class="sd">&quot;&quot;&quot;Real power injected at &quot;to&quot; bus end (MW)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">q_to</span> <span class="o">=</span> <span class="n">q_to</span>
+        <span class="sd">&quot;&quot;&quot;Reactive power injected at &quot;to&quot; bus end (MVAr)&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">(name=</span><span class="si">%-6s</span><span class="s1">, from_bus=</span><span class="si">%-6s</span><span class="s1">, to_bus=</span><span class="si">%-6s</span><span class="s1">, p_from=</span><span class="si">%+8.3f</span><span class="s1">, &#39;</span>
+                <span class="s1">&#39;q_from=</span><span class="si">%+8.3f</span><span class="s1">, p_to=</span><span class="si">%+8.3f</span><span class="s1">, q_to=</span><span class="si">%+8.3f</span><span class="s1">)&#39;</span><span class="p">)</span> <span class="o">%</span> <span class="p">(</span>
+            <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__name__</span><span class="p">,</span>
+            <span class="s2">&quot;&#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="s2">&quot;&#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">from_bus</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="s2">&quot;&#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_bus</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">p_from</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">q_from</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">p_to</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">q_to</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Case"><a class="viewcode-back" href="../Topology_BusBranch.html#Topology_BusBranch.Case">[docs]</a><span class="k">class</span> <span class="nc">Case</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    *Case* is a container for :class:`Bus`es, :class:`Generator`s and</span>
+<span class="sd">    :class:`Branch`es.</span>
+
+<span class="sd">    It also holds the global *base_mva* attribute for the case.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base_mva</span><span class="p">,</span> <span class="n">buses</span><span class="p">,</span> <span class="n">generators</span><span class="p">,</span> <span class="n">branches</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_mva</span> <span class="o">=</span> <span class="n">base_mva</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">buses</span> <span class="o">=</span> <span class="n">buses</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generators</span> <span class="o">=</span> <span class="n">generators</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">branches</span> <span class="o">=</span> <span class="n">branches</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">bus_ids</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># Gets updated whenever a case is created</span>
+
+<div class="viewcode-block" id="Case.reset"><a class="viewcode-back" href="../Topology_BusBranch.html#Topology_BusBranch.Case.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Resets all buses and generators.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">buses</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">generators</span><span class="p">:</span>
+            <span class="n">item</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">lists</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">buses</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">generators</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">branches</span><span class="p">]</span>
+        <span class="n">reprs</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s1">&#39;    </span><span class="si">%s</span><span class="s1">,&#39;</span> <span class="o">%</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">li</span><span class="p">])</span> <span class="k">for</span> <span class="n">li</span> <span class="ow">in</span> <span class="n">lists</span><span class="p">]</span>
+        <span class="n">reprs</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;[</span><span class="se">\n</span><span class="si">%s</span><span class="se">\n</span><span class="s1">]&#39;</span> <span class="o">%</span> <span class="n">rep</span> <span class="k">for</span> <span class="n">rep</span> <span class="ow">in</span> <span class="n">reprs</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="p">(</span><span class="s1">&#39;&lt;</span><span class="si">%s</span><span class="s1"> object </span><span class="se">\n</span><span class="s1">  base_mva=</span><span class="si">%s</span><span class="s1">,</span><span class="se">\n</span><span class="s1">  buses=</span><span class="si">%s</span><span class="s1">,</span><span class="se">\n</span><span class="s1"> generators=</span><span class="si">%s</span><span class="s1">,</span><span class="se">\n</span><span class="s1">&#39;</span>
+                <span class="s1">&#39;  branches=</span><span class="si">%s</span><span class="s1">&gt;&#39;</span><span class="p">)</span> <span class="o">%</span> <span class="p">(</span>
+            <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__name__</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">base_mva</span><span class="p">,</span>
+            <span class="n">reprs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">reprs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">reprs</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+        <span class="p">)</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CIM2Matpower 160513 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, Konstantin Gerasimov.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
+    </div>
+  </body>
+</html>

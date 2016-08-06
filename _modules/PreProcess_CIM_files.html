@@ -1,0 +1,249 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>PreProcess_CIM_files &mdash; CIM2Matpower 160513 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '160513',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="CIM2Matpower 160513 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CIM2Matpower 160513 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for PreProcess_CIM_files</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">The module ``PreProcess_CIM_files`` defines function to be used for preprocessing CIM files before they are parsed with</span>
+<span class="sd">the ``PyCIM`` ``RDFXMLReader``. Most often it means fixing certain HTML tags.</span>
+
+<span class="sd">.. seealso:: :py:func:`CIM2Matpower.cim_to_mpc` and the Matlab functions ``MPC_NODAL2BB`` and ``MPC_BB2NODAL``</span>
+
+<span class="sd">:Date: 2016-05-10</span>
+<span class="sd">:Authors: Konstantin Gerasimov</span>
+<span class="sd">:e-mail: kkgerasimov@gmail.com</span>
+
+<span class="sd">:Credits: This function is created for KU-Leuven as part of the GARPUR project http://www.garpur-project.eu</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<span class="kn">from</span> <span class="nn">tempfile</span> <span class="kn">import</span> <span class="n">mkstemp</span>
+<span class="kn">from</span> <span class="nn">shutil</span> <span class="kn">import</span> <span class="n">move</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+
+<span class="kn">from</span> <span class="nn">PyCIM</span> <span class="kn">import</span> <span class="n">RDFXMLReader</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="fix_RTE_cim_files"><a class="viewcode-back" href="../PreProcess_CIM_files.html#PreProcess_CIM_files.fix_RTE_cim_files">[docs]</a><span class="k">def</span> <span class="nf">fix_RTE_cim_files</span><span class="p">(</span><span class="n">cim_files</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines string substitutions to be made in the CIM files (specific to RTE provided CIM files) so that they are</span>
+<span class="sd">    compliant with the ``PyCIM`` package.</span>
+
+<span class="sd">    .. note:: The CIM14 standard specifies that ReactiveCapabilityCurve.CurveDatas should point to the CurveData objects.</span>
+<span class="sd">        However RTE&#39;s implementation of CIM14 does the opposite which lead to not being able to access CurveData about</span>
+<span class="sd">        the ReactiveCapabilityCurve from within the generator. The same goes for the other substitutions defined in this</span>
+<span class="sd">        function.</span>
+
+<span class="sd">    :param cim_files: CIM XML files</span>
+<span class="sd">    :type cim_files: list of strings</span>
+<span class="sd">    :return: None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">cim_version</span> <span class="o">=</span> <span class="s1">&#39;http://iec.ch/TC57/2009/CIM-schema-cim14#&#39;</span>
+    <span class="n">subst_id</span> <span class="o">=</span> <span class="s1">&#39;RTE.CIMv14.160510&#39;</span>
+
+    <span class="c1"># NB: The CIM14 standard specifies that ReactiveCapabilityCurve.CurveDatas should point to the CurveData objects.</span>
+    <span class="c1"># However RTE&#39;s implementation of CIM14 does the opposite which lead to not being able to access CurveData about</span>
+    <span class="c1"># the ReactiveCapabilityCurve from within the generator. The same goes for the other substitutions</span>
+    <span class="n">substitutions</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="c1"># From the EQ (EQuipment) CIM file</span>
+    <span class="c1"># substitutions[( &#39;original_string&#39;, &#39;substitution_string&#39; )] = count_of_substitutions</span>
+    <span class="n">substitutions</span><span class="p">[(</span><span class="s1">&#39;&lt;cim:CurveData.CurveSchedule&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;cim:CurveData.Curve&#39;</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">substitutions</span><span class="p">[(</span><span class="s1">&#39;&lt;cim:SynchronousMachine.MemberOf_GeneratingUnit&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;cim:SynchronousMachine.GeneratingUnit&#39;</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">substitutions</span><span class="p">[(</span><span class="s1">&#39;MemberOf_EquipmentContainer&#39;</span><span class="p">,</span> <span class="s1">&#39;EquipmentContainer&#39;</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">substitutions</span><span class="p">[(</span><span class="s1">&#39;MemberOf_Substation&#39;</span><span class="p">,</span> <span class="s1">&#39;Substation&#39;</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">substitutions</span><span class="p">[(</span><span class="s1">&#39;DrivenBy_SynchronousMachine&#39;</span><span class="p">,</span> <span class="s1">&#39;SynchronousMachine&#39;</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="c1"># From the TP (Topology) CIM file - no substitutions are necessary for now</span>
+    <span class="c1"># From the SV (State Variables) CIM file - no substitutions are necessary for now</span>
+
+    <span class="n">fix_cim_files</span><span class="p">(</span><span class="n">cim_files</span><span class="p">,</span> <span class="n">substitutions</span><span class="p">,</span> <span class="n">cim_version</span><span class="p">,</span> <span class="n">subst_id</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="fix_cim_files"><a class="viewcode-back" href="../PreProcess_CIM_files.html#PreProcess_CIM_files.fix_cim_files">[docs]</a><span class="k">def</span> <span class="nf">fix_cim_files</span><span class="p">(</span><span class="n">cim_files</span><span class="p">,</span> <span class="n">substitutions</span><span class="p">,</span> <span class="n">cim_version</span><span class="p">,</span> <span class="n">subst_id</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Reads a XML file (containing the CIM model) and substitute strings, as defined by the *substitutions* input parameter.</span>
+
+<span class="sd">    :param cim_files: CIM XML files</span>
+<span class="sd">    :type cim_files: list of strings</span>
+<span class="sd">    :param substitutions: defines substitutions to be made in the CIM XML file in the following format</span>
+<span class="sd">        substitutions[( &#39;original_string&#39;, &#39;substitution_string&#39; )] = count_of_substitutions</span>
+<span class="sd">    :type substitutions: dictionary</span>
+<span class="sd">    :param cim_version: the CIM subst_id for which the substitution applies</span>
+<span class="sd">    :type cim_version: strings</span>
+<span class="sd">    :param subst_id: id of the set of substitutions to be made</span>
+<span class="sd">    :type subst_id: string</span>
+<span class="sd">    :return: None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">comment_first_line</span> <span class="o">=</span> <span class="s1">&#39;&lt;!-- START of message from GARPUR CIM Import tool (</span><span class="si">%s</span><span class="s1">)</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">subst_id</span>
+    <span class="n">comment_last_line</span> <span class="o">=</span> <span class="s1">&#39;END of message from GARPUR CIM Import tool (</span><span class="si">%s</span><span class="s1">)--&gt;&#39;</span> <span class="o">%</span> <span class="n">subst_id</span>
+
+    <span class="k">for</span> <span class="n">cim_file</span> <span class="ow">in</span> <span class="n">cim_files</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">cim_file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">FILE</span><span class="p">:</span>
+            <span class="c1"># Move the pointer (similar to a cursor in a text editor) to the end of the file.</span>
+            <span class="n">FILE</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">SEEK_END</span><span class="p">)</span>
+
+            <span class="c1"># This code means the following code skips the very last character in the file -</span>
+            <span class="c1"># i.e. in the case the last line is null we delete the last line</span>
+            <span class="c1"># and the penultimate one</span>
+            <span class="n">pos</span> <span class="o">=</span> <span class="n">FILE</span><span class="o">.</span><span class="n">tell</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span>
+
+            <span class="c1"># Read each character in the file one at a time from the penultimate</span>
+            <span class="c1"># character going backwards, searching for a newline character</span>
+            <span class="c1"># If we find a new line, exit the search</span>
+            <span class="k">while</span> <span class="n">pos</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">FILE</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">!=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">:</span>
+                <span class="n">pos</span> <span class="o">-=</span> <span class="mi">1</span>
+                <span class="n">FILE</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">SEEK_SET</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">pos</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">FILE</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="n">pos</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">SEEK_SET</span><span class="p">)</span>  <span class="c1"># the +1 is to ignore the &#39;\n&#39; from the previous line</span>
+                <span class="n">last_line_in_file</span> <span class="o">=</span> <span class="n">FILE</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">last_line_in_file</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+
+            <span class="k">if</span> <span class="n">last_line_in_file</span> <span class="o">==</span> <span class="n">comment_last_line</span><span class="p">:</span>
+                <span class="n">FILE</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+                <span class="n">logging_message</span> <span class="o">=</span> <span class="s1">&#39;File &quot;</span><span class="si">%s</span><span class="s1">&quot; has been already previously checked for compliance with the PyCIM library definitions!</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">cim_file</span>
+                <span class="c1"># print(logging_message)</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">logging_message</span><span class="p">)</span>
+                <span class="k">continue</span>
+        <span class="n">FILE</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="n">xmlns</span> <span class="o">=</span> <span class="n">RDFXMLReader</span><span class="o">.</span><span class="n">xmlns</span><span class="p">(</span><span class="n">cim_file</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">xmlns</span><span class="p">[</span><span class="s1">&#39;cim&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">cim_version</span><span class="p">:</span>
+            <span class="n">cont_changes</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">fh_temp</span><span class="p">,</span> <span class="n">abs_path_temp</span> <span class="o">=</span> <span class="n">mkstemp</span><span class="p">()</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">abs_path_temp</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">new_file</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="n">cim_file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">old_file</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">old_file</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">original</span><span class="p">,</span> <span class="n">substitution</span> <span class="ow">in</span> <span class="n">substitutions</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">original</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+                            <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">original</span><span class="p">,</span> <span class="n">substitution</span><span class="p">)</span>
+                            <span class="n">cont_changes</span> <span class="o">+=</span> <span class="mi">1</span>
+                            <span class="n">substitutions</span><span class="p">[(</span><span class="n">original</span><span class="p">,</span> <span class="n">substitution</span><span class="p">)]</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="n">new_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+
+                <span class="c1"># Write an XML comment at the end that substitutions were made</span>
+                <span class="n">new_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">comment_first_line</span><span class="p">)</span>
+                <span class="n">new_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;The following substitions were made in this file in order to comply with the PyCIM library definitions!</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="n">new_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;&lt;substitutions&gt;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="n">new_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&lt;datetime&gt;</span><span class="si">%s</span><span class="s1">&lt;\datetime&gt;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">())</span>
+                <span class="k">for</span> <span class="n">pattern</span><span class="p">,</span> <span class="n">num_substitution</span> <span class="ow">in</span> <span class="n">substitutions</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="n">num_substitution</span><span class="p">:</span>
+                        <span class="n">new_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&lt;substitution&gt;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                        <span class="n">new_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t\t</span><span class="s1">&lt;originalText&gt;&quot;</span><span class="si">%s</span><span class="s1">&quot;&lt;/originalText&gt;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">pattern</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                        <span class="n">new_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t\t</span><span class="s1">&lt;substitutionText&gt;&quot;</span><span class="si">%s</span><span class="s1">&quot;&lt;/substitutionText&gt;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">pattern</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                        <span class="n">new_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t\t</span><span class="s1">&lt;numSubstitutions&gt;</span><span class="si">%d</span><span class="s1">&lt;/numSubstitutions&gt;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">num_substitution</span><span class="p">)</span>
+                        <span class="n">new_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&lt;/substitution&gt;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="n">new_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;&lt;/substitutions&gt;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="n">new_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">comment_last_line</span><span class="p">)</span>
+
+            <span class="n">os</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fh_temp</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">cont_changes</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">cim_file</span><span class="p">)</span>
+                <span class="n">move</span><span class="p">(</span><span class="n">abs_path_temp</span><span class="p">,</span> <span class="n">cim_file</span><span class="p">)</span>
+                <span class="n">logging_message</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%d</span><span class="s1"> changes were made in </span><span class="si">%s</span><span class="s1">!&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">cont_changes</span><span class="p">,</span> <span class="n">cim_file</span><span class="p">)</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">logging_message</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">cim_file</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">FILE</span><span class="p">:</span>
+                    <span class="n">FILE</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">comment_first_line</span><span class="p">)</span>
+                    <span class="n">FILE</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;This file was checked and is compliant with the PyCIM library definitions!</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                    <span class="n">FILE</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;&lt;datetime&gt;</span><span class="si">%s</span><span class="s1">&lt;\datetime&gt;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">())</span>
+                    <span class="n">FILE</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">comment_last_line</span><span class="p">)</span>
+                    <span class="n">FILE</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+                <span class="n">logging_message</span> <span class="o">=</span> <span class="s1">&#39;No changes were made in </span><span class="si">%s</span><span class="s1">!&#39;</span> <span class="o">%</span> <span class="n">cim_file</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">logging_message</span><span class="p">)</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">abs_path_temp</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">logging_message</span> <span class="o">=</span> <span class="s1">&#39;File &quot;</span><span class="si">%s</span><span class="s1">&quot; is CIM version </span><span class="si">%s</span><span class="s1">! </span><span class="se">\n</span><span class="s1">However, the check for compliance with the PyCIM library definitions is for CIM version </span><span class="si">%s</span><span class="s1"> </span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">cim_file</span><span class="p">,</span> <span class="n">xmlns</span><span class="p">[</span><span class="s1">&#39;cim&#39;</span><span class="p">],</span> <span class="n">cim_version</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">logging_message</span><span class="p">)</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CIM2Matpower 160513 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, Konstantin Gerasimov.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
+    </div>
+  </body>
+</html>

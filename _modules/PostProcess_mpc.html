@@ -1,0 +1,282 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>PostProcess_mpc &mdash; CIM2Matpower 160513 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '160513',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="CIM2Matpower 160513 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CIM2Matpower 160513 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for PostProcess_mpc</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">The PYPOWER extension converts :class:`Case` objects to PYPOWER cases and</span>
+<span class="sd">writes results from a power flow calculation back to the orignal case instance.</span>
+<span class="sd">The module ``PostProcess_CIM_files`` defines function to be used for preprocessing CIM files before they are parsed with</span>
+<span class="sd">the ``PyCIM`` ``RDFXMLReader``. Most often it means fixing certain HTML tags.</span>
+
+<span class="sd">.. note:: This module is based mostly on the the started but never finished OpenSource project Cim2BusBranch https://www.versioneye.com/Python/Cim2BusBranch/0.1</span>
+
+<span class="sd">.. seealso:: :py:func:`CIM2Matpower.cim_to_mpc` and the Matlab functions ``MPC_NODAL2BB`` and ``MPC_BB2NODAL``</span>
+
+<span class="sd">:Date: 2016-05-10</span>
+<span class="sd">:Authors: Konstantin Gerasimov</span>
+<span class="sd">:e-mail: kkgerasimov@gmail.com</span>
+
+<span class="sd">:Credits: This function is created for KU-Leuven as part of the GARPUR project http://www.garpur-project.eu</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">pypower</span> <span class="kn">import</span> <span class="n">idx_bus</span><span class="p">,</span> <span class="n">idx_gen</span><span class="p">,</span> <span class="n">idx_brch</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">Topology_BusBranch</span> <span class="kn">import</span> <span class="n">bus_type</span>
+
+
+<span class="n">bus_type_map</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">bus_type</span><span class="o">.</span><span class="n">PQ</span><span class="p">:</span> <span class="n">idx_bus</span><span class="o">.</span><span class="n">PQ</span><span class="p">,</span>
+    <span class="n">bus_type</span><span class="o">.</span><span class="n">PV</span><span class="p">:</span> <span class="n">idx_bus</span><span class="o">.</span><span class="n">PV</span><span class="p">,</span>
+    <span class="n">bus_type</span><span class="o">.</span><span class="n">REF</span><span class="p">:</span> <span class="n">idx_bus</span><span class="o">.</span><span class="n">REF</span><span class="p">,</span>
+    <span class="n">bus_type</span><span class="o">.</span><span class="n">ISOLATED</span><span class="p">:</span> <span class="n">idx_bus</span><span class="o">.</span><span class="n">NONE</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+<div class="viewcode-block" id="create_mpc"><a class="viewcode-back" href="../PostProcess_mpc.html#PostProcess_mpc.create_mpc">[docs]</a><span class="k">def</span> <span class="nf">create_mpc</span><span class="p">(</span><span class="n">case</span><span class="p">,</span> <span class="n">node_breaker_topology</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Creates and returns a Matpower case (mpc) from *case*.&quot;&quot;&quot;</span>
+
+    <span class="n">node_breaker_topology_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;nodes&#39;</span><span class="p">:</span> <span class="n">node_breaker_topology</span><span class="o">.</span><span class="n">nodes</span><span class="p">,</span>
+                <span class="s1">&#39;areas&#39;</span><span class="p">:</span><span class="n">node_breaker_topology</span><span class="o">.</span><span class="n">areas</span><span class="p">,</span>
+                <span class="s1">&#39;zones&#39;</span><span class="p">:</span><span class="n">node_breaker_topology</span><span class="o">.</span><span class="n">zones</span><span class="p">,</span>
+                <span class="s1">&#39;substations&#39;</span><span class="p">:</span> <span class="n">node_breaker_topology</span><span class="o">.</span><span class="n">substations</span><span class="p">,</span>
+                <span class="s1">&#39;switches&#39;</span><span class="p">:</span> <span class="n">node_breaker_topology</span><span class="o">.</span><span class="n">switches</span><span class="p">,</span>
+                <span class="s1">&#39;branches&#39;</span><span class="p">:</span> <span class="n">node_breaker_topology</span><span class="o">.</span><span class="n">branches</span><span class="p">,</span>
+                <span class="s1">&#39;generators&#39;</span><span class="p">:</span> <span class="n">node_breaker_topology</span><span class="o">.</span><span class="n">generators</span><span class="p">,</span>
+                <span class="s1">&#39;loads&#39;</span><span class="p">:</span> <span class="n">node_breaker_topology</span><span class="o">.</span><span class="n">loads</span><span class="p">,</span>
+                <span class="s1">&#39;shunts&#39;</span><span class="p">:</span> <span class="n">node_breaker_topology</span><span class="o">.</span><span class="n">shunts</span><span class="p">,</span>
+                <span class="s1">&#39;phasetapchangers&#39;</span><span class="p">:</span> <span class="n">node_breaker_topology</span><span class="o">.</span><span class="n">phasetapchangers</span><span class="p">,</span>
+                <span class="s1">&#39;ratiotapchangers&#39;</span><span class="p">:</span> <span class="n">node_breaker_topology</span><span class="o">.</span><span class="n">ratiotapchangers</span><span class="p">,</span>
+                <span class="s1">&#39;CIM_filenames&#39;</span><span class="p">:</span> <span class="n">node_breaker_topology</span><span class="o">.</span><span class="n">CIM_filenames</span><span class="p">,</span>
+                <span class="p">}</span>
+
+    <span class="n">mpc</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;version&#39;</span><span class="p">:</span> <span class="s1">&#39;2&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;baseMVA&#39;</span><span class="p">:</span> <span class="n">case</span><span class="o">.</span><span class="n">base_mva</span><span class="p">,</span>
+        <span class="s1">&#39;bus&#39;</span><span class="p">:</span> <span class="n">_make_bus_list</span><span class="p">(</span><span class="n">case</span><span class="p">),</span>
+        <span class="s1">&#39;gen&#39;</span><span class="p">:</span> <span class="n">_make_gen_list</span><span class="p">(</span><span class="n">case</span><span class="o">.</span><span class="n">generators</span><span class="p">,</span> <span class="n">case</span><span class="o">.</span><span class="n">bus_ids</span><span class="p">),</span>
+        <span class="s1">&#39;branch&#39;</span><span class="p">:</span> <span class="n">_make_branch_list</span><span class="p">(</span><span class="n">case</span><span class="o">.</span><span class="n">branches</span><span class="p">,</span> <span class="n">case</span><span class="o">.</span><span class="n">bus_ids</span><span class="p">),</span>
+        <span class="s1">&#39;NodeBreaker_topology&#39;</span><span class="p">:</span> <span class="n">node_breaker_topology_dict</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">mpc</span></div>
+
+
+<span class="c1"># def write_results_to_case(ppc, case):</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
+<span class="c1">#     Write the results of a pf computation ((re)active power, voltage magnitude</span>
+<span class="c1">#     and angle) back to the *case*.</span>
+<span class="c1">#</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
+<span class="c1">#     for res, bus in zip(ppc[&#39;bus&#39;], case.buses):</span>
+<span class="c1">#         assert res[idx_bus.BUS_I] == case.bus_ids[bus]</span>
+<span class="c1">#</span>
+<span class="c1">#         bus.pd = res[idx_bus.PD]</span>
+<span class="c1">#         bus.qd = res[idx_bus.QD]</span>
+<span class="c1">#         bus.vm = res[idx_bus.VM]</span>
+<span class="c1">#         bus.va = res[idx_bus.VA]</span>
+<span class="c1">#</span>
+<span class="c1">#     for res, gen in zip(ppc[&#39;gen&#39;], case.generators):</span>
+<span class="c1">#         assert res[idx_gen.GEN_BUS] == case.bus_ids[gen.bus]</span>
+<span class="c1">#</span>
+<span class="c1">#         gen.pg = res[idx_gen.PG]</span>
+<span class="c1">#         gen.qg = res[idx_gen.QG]</span>
+<span class="c1">#</span>
+<span class="c1">#     for res, branch in zip(ppc[&#39;branch&#39;], case.branches):</span>
+<span class="c1">#         assert res[idx_brch.F_BUS] == case.bus_ids[branch.from_bus]</span>
+<span class="c1">#         assert res[idx_brch.T_BUS] == case.bus_ids[branch.to_bus]</span>
+<span class="c1">#</span>
+<span class="c1">#         branch.p_from = res[idx_brch.PF]</span>
+<span class="c1">#         branch.q_from = res[idx_brch.QF]</span>
+<span class="c1">#         branch.p_to = res[idx_brch.PT]</span>
+<span class="c1">#         branch.q_to = res[idx_brch.QT]</span>
+
+
+<div class="viewcode-block" id="_make_bus_list"><a class="viewcode-back" href="../PostProcess_mpc.html#PostProcess_mpc._make_bus_list">[docs]</a><span class="k">def</span> <span class="nf">_make_bus_list</span><span class="p">(</span><span class="n">case</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Creates a list ob bus arrays for PYPOWER.&quot;&quot;&quot;</span>
+    <span class="c1"># Needs *case* to create/update the mapping bus: bus_id mapping</span>
+    <span class="c1"># PYPOWER bus description has 13 (or +4) entries</span>
+    <span class="n">bus_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">case</span><span class="o">.</span><span class="n">buses</span><span class="p">),</span> <span class="mi">13</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+
+    <span class="n">case</span><span class="o">.</span><span class="n">bus_ids</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">bus</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">case</span><span class="o">.</span><span class="n">buses</span><span class="p">):</span>
+        <span class="n">case</span><span class="o">.</span><span class="n">bus_ids</span><span class="p">[</span><span class="n">bus</span><span class="p">]</span> <span class="o">=</span> <span class="n">bus</span><span class="o">.</span><span class="n">id</span>
+        <span class="n">_fill_bus_array</span><span class="p">(</span><span class="n">bus_list</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">bus</span><span class="p">,</span> <span class="n">bus</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">bus_list</span></div>
+
+
+<div class="viewcode-block" id="_fill_bus_array"><a class="viewcode-back" href="../PostProcess_mpc.html#PostProcess_mpc._fill_bus_array">[docs]</a><span class="k">def</span> <span class="nf">_fill_bus_array</span><span class="p">(</span><span class="n">bus_array</span><span class="p">,</span> <span class="n">bus</span><span class="p">,</span> <span class="n">bus_id</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Fills the array of a bus with its values.&quot;&quot;&quot;</span>
+    <span class="n">bus_array</span><span class="p">[</span><span class="n">idx_bus</span><span class="o">.</span><span class="n">BUS_I</span><span class="p">]</span> <span class="o">=</span> <span class="n">bus_id</span>
+    <span class="n">bus_array</span><span class="p">[</span><span class="n">idx_bus</span><span class="o">.</span><span class="n">BUS_TYPE</span><span class="p">]</span> <span class="o">=</span> <span class="n">bus</span><span class="o">.</span><span class="n">btype</span>
+    <span class="n">bus_array</span><span class="p">[</span><span class="n">idx_bus</span><span class="o">.</span><span class="n">PD</span><span class="p">]</span> <span class="o">=</span> <span class="n">bus</span><span class="o">.</span><span class="n">pd</span>
+    <span class="n">bus_array</span><span class="p">[</span><span class="n">idx_bus</span><span class="o">.</span><span class="n">QD</span><span class="p">]</span> <span class="o">=</span> <span class="n">bus</span><span class="o">.</span><span class="n">qd</span>
+    <span class="n">bus_array</span><span class="p">[</span><span class="n">idx_bus</span><span class="o">.</span><span class="n">GS</span><span class="p">]</span> <span class="o">=</span> <span class="n">bus</span><span class="o">.</span><span class="n">gs</span>
+    <span class="n">bus_array</span><span class="p">[</span><span class="n">idx_bus</span><span class="o">.</span><span class="n">BS</span><span class="p">]</span> <span class="o">=</span> <span class="n">bus</span><span class="o">.</span><span class="n">bs</span>
+    <span class="n">bus_array</span><span class="p">[</span><span class="n">idx_bus</span><span class="o">.</span><span class="n">BUS_AREA</span><span class="p">]</span> <span class="o">=</span> <span class="n">bus</span><span class="o">.</span><span class="n">area</span>
+    <span class="n">bus_array</span><span class="p">[</span><span class="n">idx_bus</span><span class="o">.</span><span class="n">VM</span><span class="p">]</span> <span class="o">=</span> <span class="n">bus</span><span class="o">.</span><span class="n">vm</span>
+    <span class="n">bus_array</span><span class="p">[</span><span class="n">idx_bus</span><span class="o">.</span><span class="n">VA</span><span class="p">]</span> <span class="o">=</span> <span class="n">bus</span><span class="o">.</span><span class="n">va</span>
+    <span class="n">bus_array</span><span class="p">[</span><span class="n">idx_bus</span><span class="o">.</span><span class="n">BASE_KV</span><span class="p">]</span> <span class="o">=</span> <span class="n">bus</span><span class="o">.</span><span class="n">base_kv</span>
+    <span class="n">bus_array</span><span class="p">[</span><span class="n">idx_bus</span><span class="o">.</span><span class="n">ZONE</span><span class="p">]</span> <span class="o">=</span> <span class="n">bus</span><span class="o">.</span><span class="n">zone</span>
+    <span class="n">bus_array</span><span class="p">[</span><span class="n">idx_bus</span><span class="o">.</span><span class="n">VMAX</span><span class="p">]</span> <span class="o">=</span> <span class="n">bus</span><span class="o">.</span><span class="n">vm_max</span>
+    <span class="n">bus_array</span><span class="p">[</span><span class="n">idx_bus</span><span class="o">.</span><span class="n">VMIN</span><span class="p">]</span> <span class="o">=</span> <span class="n">bus</span><span class="o">.</span><span class="n">vm_min</span></div>
+
+<div class="viewcode-block" id="_make_bus_names"><a class="viewcode-back" href="../PostProcess_mpc.html#PostProcess_mpc._make_bus_names">[docs]</a><span class="k">def</span> <span class="nf">_make_bus_names</span><span class="p">(</span><span class="n">case</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Creates a list with the busnames.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">bus</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">bus</span> <span class="ow">in</span> <span class="n">case</span><span class="o">.</span><span class="n">buses</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="_make_gen_list"><a class="viewcode-back" href="../PostProcess_mpc.html#PostProcess_mpc._make_gen_list">[docs]</a><span class="k">def</span> <span class="nf">_make_gen_list</span><span class="p">(</span><span class="n">generators</span><span class="p">,</span> <span class="n">bus_ids</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Creates a list of generators for PYPOWER.&quot;&quot;&quot;</span>
+    <span class="c1"># PYPOWER gen description has 21 (+4) entries</span>
+    <span class="n">gen_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">generators</span><span class="p">),</span> <span class="mi">21</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">gen</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">generators</span><span class="p">):</span>
+        <span class="n">_fill_gen_array</span><span class="p">(</span><span class="n">gen_list</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">gen</span><span class="p">,</span> <span class="n">bus_ids</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">gen_list</span></div>
+
+
+<div class="viewcode-block" id="_fill_gen_array"><a class="viewcode-back" href="../PostProcess_mpc.html#PostProcess_mpc._fill_gen_array">[docs]</a><span class="k">def</span> <span class="nf">_fill_gen_array</span><span class="p">(</span><span class="n">gen_array</span><span class="p">,</span> <span class="n">gen</span><span class="p">,</span> <span class="n">bus_ids</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Fills the array of a gen with its values.&quot;&quot;&quot;</span>
+    <span class="n">gen_array</span><span class="p">[</span><span class="n">idx_gen</span><span class="o">.</span><span class="n">GEN_BUS</span><span class="p">]</span> <span class="o">=</span> <span class="n">bus_ids</span><span class="p">[</span><span class="n">gen</span><span class="o">.</span><span class="n">bus</span><span class="p">]</span>
+    <span class="n">gen_array</span><span class="p">[</span><span class="n">idx_gen</span><span class="o">.</span><span class="n">PG</span><span class="p">]</span> <span class="o">=</span> <span class="n">gen</span><span class="o">.</span><span class="n">pg</span>
+    <span class="n">gen_array</span><span class="p">[</span><span class="n">idx_gen</span><span class="o">.</span><span class="n">QG</span><span class="p">]</span> <span class="o">=</span> <span class="n">gen</span><span class="o">.</span><span class="n">qg</span>
+    <span class="n">gen_array</span><span class="p">[</span><span class="n">idx_gen</span><span class="o">.</span><span class="n">QMAX</span><span class="p">]</span> <span class="o">=</span> <span class="n">gen</span><span class="o">.</span><span class="n">qg_max</span>
+    <span class="n">gen_array</span><span class="p">[</span><span class="n">idx_gen</span><span class="o">.</span><span class="n">QMIN</span><span class="p">]</span> <span class="o">=</span> <span class="n">gen</span><span class="o">.</span><span class="n">qg_min</span>
+    <span class="n">gen_array</span><span class="p">[</span><span class="n">idx_gen</span><span class="o">.</span><span class="n">VG</span><span class="p">]</span> <span class="o">=</span> <span class="n">gen</span><span class="o">.</span><span class="n">vg</span>
+    <span class="n">gen_array</span><span class="p">[</span><span class="n">idx_gen</span><span class="o">.</span><span class="n">MBASE</span><span class="p">]</span> <span class="o">=</span> <span class="n">gen</span><span class="o">.</span><span class="n">base_mva</span>
+    <span class="n">gen_array</span><span class="p">[</span><span class="n">idx_gen</span><span class="o">.</span><span class="n">GEN_STATUS</span><span class="p">]</span> <span class="o">=</span> <span class="n">gen</span><span class="o">.</span><span class="n">online</span>
+    <span class="n">gen_array</span><span class="p">[</span><span class="n">idx_gen</span><span class="o">.</span><span class="n">PMAX</span><span class="p">]</span> <span class="o">=</span> <span class="n">gen</span><span class="o">.</span><span class="n">pg_max</span>
+    <span class="n">gen_array</span><span class="p">[</span><span class="n">idx_gen</span><span class="o">.</span><span class="n">PMIN</span><span class="p">]</span> <span class="o">=</span> <span class="n">gen</span><span class="o">.</span><span class="n">pg_min</span>
+    <span class="n">gen_array</span><span class="p">[</span><span class="n">idx_gen</span><span class="o">.</span><span class="n">PC1</span><span class="p">]</span> <span class="o">=</span> <span class="n">gen</span><span class="o">.</span><span class="n">pc1</span>
+    <span class="n">gen_array</span><span class="p">[</span><span class="n">idx_gen</span><span class="o">.</span><span class="n">PC2</span><span class="p">]</span> <span class="o">=</span> <span class="n">gen</span><span class="o">.</span><span class="n">pc2</span>
+    <span class="n">gen_array</span><span class="p">[</span><span class="n">idx_gen</span><span class="o">.</span><span class="n">QC1MIN</span><span class="p">]</span> <span class="o">=</span> <span class="n">gen</span><span class="o">.</span><span class="n">qc1_min</span>
+    <span class="n">gen_array</span><span class="p">[</span><span class="n">idx_gen</span><span class="o">.</span><span class="n">QC1MAX</span><span class="p">]</span> <span class="o">=</span> <span class="n">gen</span><span class="o">.</span><span class="n">qc1_max</span>
+    <span class="n">gen_array</span><span class="p">[</span><span class="n">idx_gen</span><span class="o">.</span><span class="n">QC2MIN</span><span class="p">]</span> <span class="o">=</span> <span class="n">gen</span><span class="o">.</span><span class="n">qc2_min</span>
+    <span class="n">gen_array</span><span class="p">[</span><span class="n">idx_gen</span><span class="o">.</span><span class="n">QC2MAX</span><span class="p">]</span> <span class="o">=</span> <span class="n">gen</span><span class="o">.</span><span class="n">qc2_max</span>
+    <span class="n">gen_array</span><span class="p">[</span><span class="n">idx_gen</span><span class="o">.</span><span class="n">RAMP_AGC</span><span class="p">]</span> <span class="o">=</span> <span class="n">gen</span><span class="o">.</span><span class="n">ramp_agc</span>
+    <span class="n">gen_array</span><span class="p">[</span><span class="n">idx_gen</span><span class="o">.</span><span class="n">RAMP_10</span><span class="p">]</span> <span class="o">=</span> <span class="n">gen</span><span class="o">.</span><span class="n">ramp_10</span>
+    <span class="n">gen_array</span><span class="p">[</span><span class="n">idx_gen</span><span class="o">.</span><span class="n">RAMP_30</span><span class="p">]</span> <span class="o">=</span> <span class="n">gen</span><span class="o">.</span><span class="n">ramp_30</span>
+    <span class="n">gen_array</span><span class="p">[</span><span class="n">idx_gen</span><span class="o">.</span><span class="n">RAMP_Q</span><span class="p">]</span> <span class="o">=</span> <span class="n">gen</span><span class="o">.</span><span class="n">ramp_q</span>
+    <span class="n">gen_array</span><span class="p">[</span><span class="n">idx_gen</span><span class="o">.</span><span class="n">APF</span><span class="p">]</span> <span class="o">=</span> <span class="n">gen</span><span class="o">.</span><span class="n">apf</span></div>
+
+
+<div class="viewcode-block" id="_make_branch_list"><a class="viewcode-back" href="../PostProcess_mpc.html#PostProcess_mpc._make_branch_list">[docs]</a><span class="k">def</span> <span class="nf">_make_branch_list</span><span class="p">(</span><span class="n">branches</span><span class="p">,</span> <span class="n">bus_ids</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Creates a list of branches for PYPOWER.&quot;&quot;&quot;</span>
+    <span class="c1"># PYPOWER branch description has 17 (+4) entries</span>
+    <span class="n">branch_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">branches</span><span class="p">),</span> <span class="mi">17</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">branch</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">branches</span><span class="p">):</span>
+        <span class="n">_fill_branch_array</span><span class="p">(</span><span class="n">branch_list</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">branch</span><span class="p">,</span> <span class="n">bus_ids</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">branch_list</span></div>
+
+
+<div class="viewcode-block" id="_fill_branch_array"><a class="viewcode-back" href="../PostProcess_mpc.html#PostProcess_mpc._fill_branch_array">[docs]</a><span class="k">def</span> <span class="nf">_fill_branch_array</span><span class="p">(</span><span class="n">branch_array</span><span class="p">,</span> <span class="n">branch</span><span class="p">,</span> <span class="n">bus_ids</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Fills the array of a gen with its values.&quot;&quot;&quot;</span>
+    <span class="n">branch_array</span><span class="p">[</span><span class="n">idx_brch</span><span class="o">.</span><span class="n">F_BUS</span><span class="p">]</span> <span class="o">=</span> <span class="n">bus_ids</span><span class="p">[</span><span class="n">branch</span><span class="o">.</span><span class="n">from_bus</span><span class="p">]</span>
+    <span class="n">branch_array</span><span class="p">[</span><span class="n">idx_brch</span><span class="o">.</span><span class="n">T_BUS</span><span class="p">]</span> <span class="o">=</span> <span class="n">bus_ids</span><span class="p">[</span><span class="n">branch</span><span class="o">.</span><span class="n">to_bus</span><span class="p">]</span>
+    <span class="n">branch_array</span><span class="p">[</span><span class="n">idx_brch</span><span class="o">.</span><span class="n">BR_R</span><span class="p">]</span> <span class="o">=</span> <span class="n">branch</span><span class="o">.</span><span class="n">r</span>
+    <span class="n">branch_array</span><span class="p">[</span><span class="n">idx_brch</span><span class="o">.</span><span class="n">BR_X</span><span class="p">]</span> <span class="o">=</span> <span class="n">branch</span><span class="o">.</span><span class="n">x</span>
+    <span class="n">branch_array</span><span class="p">[</span><span class="n">idx_brch</span><span class="o">.</span><span class="n">BR_B</span><span class="p">]</span> <span class="o">=</span> <span class="n">branch</span><span class="o">.</span><span class="n">b</span>
+    <span class="n">branch_array</span><span class="p">[</span><span class="n">idx_brch</span><span class="o">.</span><span class="n">RATE_A</span><span class="p">]</span> <span class="o">=</span> <span class="n">branch</span><span class="o">.</span><span class="n">rate_a</span>
+    <span class="n">branch_array</span><span class="p">[</span><span class="n">idx_brch</span><span class="o">.</span><span class="n">RATE_B</span><span class="p">]</span> <span class="o">=</span> <span class="n">branch</span><span class="o">.</span><span class="n">rate_b</span>
+    <span class="n">branch_array</span><span class="p">[</span><span class="n">idx_brch</span><span class="o">.</span><span class="n">RATE_C</span><span class="p">]</span> <span class="o">=</span> <span class="n">branch</span><span class="o">.</span><span class="n">rate_c</span>
+    <span class="n">branch_array</span><span class="p">[</span><span class="n">idx_brch</span><span class="o">.</span><span class="n">TAP</span><span class="p">]</span> <span class="o">=</span> <span class="n">branch</span><span class="o">.</span><span class="n">ratio</span>
+    <span class="n">branch_array</span><span class="p">[</span><span class="n">idx_brch</span><span class="o">.</span><span class="n">SHIFT</span><span class="p">]</span> <span class="o">=</span> <span class="n">branch</span><span class="o">.</span><span class="n">angle</span>
+    <span class="n">branch_array</span><span class="p">[</span><span class="n">idx_brch</span><span class="o">.</span><span class="n">BR_STATUS</span><span class="p">]</span> <span class="o">=</span> <span class="n">branch</span><span class="o">.</span><span class="n">online</span>
+    <span class="n">branch_array</span><span class="p">[</span><span class="n">idx_brch</span><span class="o">.</span><span class="n">ANGMIN</span><span class="p">]</span> <span class="o">=</span> <span class="n">branch</span><span class="o">.</span><span class="n">angle_min</span>
+    <span class="n">branch_array</span><span class="p">[</span><span class="n">idx_brch</span><span class="o">.</span><span class="n">ANGMAX</span><span class="p">]</span> <span class="o">=</span> <span class="n">branch</span><span class="o">.</span><span class="n">angle_max</span>
+    <span class="n">branch_array</span><span class="p">[</span><span class="n">idx_brch</span><span class="o">.</span><span class="n">PF</span><span class="p">]</span> <span class="o">=</span> <span class="n">branch</span><span class="o">.</span><span class="n">p_from</span>
+    <span class="n">branch_array</span><span class="p">[</span><span class="n">idx_brch</span><span class="o">.</span><span class="n">QF</span><span class="p">]</span> <span class="o">=</span> <span class="n">branch</span><span class="o">.</span><span class="n">q_from</span>
+    <span class="n">branch_array</span><span class="p">[</span><span class="n">idx_brch</span><span class="o">.</span><span class="n">PT</span><span class="p">]</span> <span class="o">=</span> <span class="n">branch</span><span class="o">.</span><span class="n">p_to</span>
+    <span class="n">branch_array</span><span class="p">[</span><span class="n">idx_brch</span><span class="o">.</span><span class="n">QT</span><span class="p">]</span> <span class="o">=</span> <span class="n">branch</span><span class="o">.</span><span class="n">q_to</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CIM2Matpower 160513 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, Konstantin Gerasimov.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
+    </div>
+  </body>
+</html>

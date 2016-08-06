@@ -1,0 +1,482 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Topology_NodeBreaker &mdash; CIM2Matpower 160513 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '160513',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="CIM2Matpower 160513 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CIM2Matpower 160513 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for Topology_NodeBreaker</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This module contains definitions of classes to represent ONLY additional data from the CIM import,</span>
+<span class="sd">which is not part of the original Matpower data structure, but might be necessary for the GARPUR project.</span>
+
+<span class="sd">.. note:: The data in the classes in this file is structured according to how it will be represented in Matlab, and not</span>
+<span class="sd">   according to how it will be represented in the Python import code.</span>
+
+<span class="sd">.. note:: The current implementation refers to ``CIMv14`` !</span>
+
+<span class="sd">.. seealso::  :py:mod:`Topology_BusBranch` and :py:mod:`CIM2Matpower`</span>
+
+<span class="sd">:Date: 2016-05-10</span>
+<span class="sd">:Authors: Konstantin Gerasimov</span>
+<span class="sd">:e-mail: kkgerasimov@gmail.com</span>
+<span class="sd">:Credits: This function is created for KU-Leuven as part of the GARPUR project http://www.garpur-project.eu</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">count</span>
+
+
+<div class="viewcode-block" id="Node"><a class="viewcode-back" href="../Topology_NodeBreaker.html#Topology_NodeBreaker.Node">[docs]</a><span class="k">class</span> <span class="nc">Node</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Repsenets the basic info about a ``IEC61970::Topology::TopologicalNode`` object from the source CIM file.&quot;&quot;&quot;</span>
+
+    <span class="n">id_generator</span> <span class="o">=</span> <span class="n">count</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">id_cim</span><span class="p">,</span> <span class="n">bus_id</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id_cim</span> <span class="o">=</span> <span class="n">id_cim</span>
+        <span class="sd">&quot;&quot;&quot;The unique ``mRID`` object identifier attribute (string)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">bus_id</span> <span class="o">=</span> <span class="n">bus_id</span>
+        <span class="sd">&quot;&quot;&quot;A :py:attr:`Topology_BusBranch.Bus.id` (integer)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="sd">&quot;&quot;&quot;The ``name`` attribute (string)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">desc</span> <span class="o">=</span> <span class="n">desc</span>
+        <span class="sd">&quot;&quot;&quot;The ``description`` attribute (string)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id_generator</span><span class="p">)</span>
+        <span class="sd">&quot;&quot;&quot;An autogenerated ID, subsequent numbering, starting from 1, (integer)&quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="Substation"><a class="viewcode-back" href="../Topology_NodeBreaker.html#Topology_NodeBreaker.Substation">[docs]</a><span class="k">class</span> <span class="nc">Substation</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Repsenets the basic info about a ``IEC61970::Core::Substation`` object from the source CIM file.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_id_list</span><span class="p">,</span> <span class="n">id_cim</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_id_list</span> <span class="o">=</span> <span class="n">node_id_list</span>
+        <span class="sd">&quot;&quot;&quot;A list of :py:attr:`Topology_NodeBreaker.Node.id``-s within the substation (integers)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">id_cim</span> <span class="o">=</span> <span class="n">id_cim</span>
+        <span class="sd">&quot;&quot;&quot;The unique ``mRID`` object identifier attribute (string)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="sd">&quot;&quot;&quot;The ``name`` attribute (string)&quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="Area"><a class="viewcode-back" href="../Topology_NodeBreaker.html#Topology_NodeBreaker.Area">[docs]</a><span class="k">class</span> <span class="nc">Area</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Repsenets the basic info about a ``IEC61970::ControlArea::ControlArea`` object from the source CIM file.&quot;&quot;&quot;</span>
+
+    <span class="n">id_generator</span> <span class="o">=</span> <span class="n">count</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">id_cim</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">netInterchange</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">pTolerance</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id_cim</span> <span class="o">=</span> <span class="n">id_cim</span>
+        <span class="sd">&quot;&quot;&quot;The unique ``mRID`` object identifier attribute (string)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="sd">&quot;&quot;&quot;The ``name`` attribute (string)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">netInterchange</span> <span class="o">=</span> <span class="n">netInterchange</span>
+        <span class="sd">&quot;&quot;&quot;The ``netInterchange`` attribute (ActivePower datatype, usually MW for TSO networks)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">pTolerance</span> <span class="o">=</span> <span class="n">pTolerance</span>
+        <span class="sd">&quot;&quot;&quot;The ``pTolerance`` attribute (ActivePower datatype, usually MW for TSO networks)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id_generator</span><span class="p">)</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        An autogenerated ID, subsequent numbering, starting from 1, (integer)</span>
+
+<span class="sd">        .. note:: This ID goes in the Matpower ``mpc.bus(:,BUS_AREA)`` struct field.</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="Zone"><a class="viewcode-back" href="../Topology_NodeBreaker.html#Topology_NodeBreaker.Zone">[docs]</a><span class="k">class</span> <span class="nc">Zone</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Repsenets the basic info about a ``IEC61970::LoadModel::LoadArea`` object from the source CIM file.</span>
+
+<span class="sd">    .. warning:: The current implementation of the :py:meth:`CIM2Matpower.CIM2Matpower._iterate_prim_eq` is fine tuned</span>
+<span class="sd">        for the RTE CIM data in which there is no ``IEC61970::LoadModel::LoadArea`` objects and because of that instead</span>
+<span class="sd">        the ``IEC61970::Core::SubGeographicalRegion`` objects are treated as load *Zone*-s.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">id_generator</span> <span class="o">=</span> <span class="n">count</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">id_cim</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id_cim</span> <span class="o">=</span> <span class="n">id_cim</span>
+        <span class="sd">&quot;&quot;&quot;The unique ``mRID`` object identifier attribute (string)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="sd">&quot;&quot;&quot;The ``name`` attribute (string)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id_generator</span><span class="p">)</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        An autogenerated ID, subsequent numbering, starting from 1, (integer)</span>
+
+<span class="sd">        .. note:: This ID goes in the Matpower ``mpc.bus(:,ZONE) struct field.``</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="Switch"><a class="viewcode-back" href="../Topology_NodeBreaker.html#Topology_NodeBreaker.Switch">[docs]</a><span class="k">class</span> <span class="nc">Switch</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Repsenets the basic info about a ``IEC61970::Wires::Switch`` object from the source CIM file.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_from_id</span><span class="p">,</span> <span class="n">node_to_id</span><span class="p">,</span> <span class="n">id_cim</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">branch_id</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_from_id</span> <span class="o">=</span> <span class="n">node_from_id</span>
+        <span class="sd">&quot;&quot;&quot;A :py:attr:`Topology_NodeBreaker.Node.id` on Terminal 0 (integer)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_to_id</span> <span class="o">=</span> <span class="n">node_to_id</span>
+        <span class="sd">&quot;&quot;&quot;A :py:attr:`Topology_NodeBreaker.Node.id` on Terminal 1 (integer)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">id_cim</span> <span class="o">=</span> <span class="n">id_cim</span>
+        <span class="sd">&quot;&quot;&quot;The ``name`` attribute (string)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="sd">&quot;&quot;&quot;The ``name`` attribute (string)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="n">status</span>
+        <span class="sd">&quot;&quot;&quot; The *Swtich* status (Open or Closed), i.e. False if either of the *Swtich* terminal&#39;s attribute ``connected`` is False. (boolean)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">branch_id</span> <span class="o">=</span> <span class="n">branch_id</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A :py:attr:`Topology_BusBranch.Branch.id` (integer)</span>
+
+<span class="sd">        .. note:: This property only reserves place. The Matpower case, which comes out of this import tool is a *BusBranch* model,</span>
+<span class="sd">            therefore it should not have branches representing *Switch*-es. However, it the created in Matlab function ``mpc_bb2nodal.m``</span>
+<span class="sd">            is called, it creates a NodeBreaker model by adding the *Switch*-es as low impedence *Branch*-es and stores the</span>
+<span class="sd">            :py:attr:`Topology_BusBranch.Branch.id` for the opposite transformation. This information is also necessary</span>
+<span class="sd">            when switching actions are to be performed.</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="Branch"><a class="viewcode-back" href="../Topology_NodeBreaker.html#Topology_NodeBreaker.Branch">[docs]</a><span class="k">class</span> <span class="nc">Branch</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>  <span class="c1"># cim_branches list</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Represents additional to the :py:class:`Topology_BusBranch.Branch` data about either ``IEC61970::Wires::ACLineSegment``</span>
+<span class="sd">    or ``IEC61970::Wires::PowerTransformer`` object from the source CIM file, which formed that *Branch*.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">id_generator</span> <span class="o">=</span> <span class="n">count</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_from_id</span><span class="p">,</span> <span class="n">node_to_id</span><span class="p">,</span> <span class="n">id_cim</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">status_from</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">status_to</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_from_id</span> <span class="o">=</span> <span class="n">node_from_id</span>
+        <span class="sd">&quot;&quot;&quot;A :py:attr:`Topology_NodeBreaker.Node.id`` on Terminal 0 (integer)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_to_id</span> <span class="o">=</span> <span class="n">node_to_id</span>
+        <span class="sd">&quot;&quot;&quot;A :py:attr:`Topology_NodeBreaker.Node.id`` on Terminal 1 (integer)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">id_cim</span> <span class="o">=</span> <span class="n">id_cim</span>
+        <span class="sd">&quot;&quot;&quot;The unique ``mRID`` object identifier attribute (string)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="sd">&quot;&quot;&quot;The ``name`` attribute (string)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">status_from</span> <span class="o">=</span> <span class="n">status_from</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The *Branch* FROM terminal status (Open or Closed), i.e. terminal&#39;s attribute ``connected``. (boolean)</span>
+
+<span class="sd">        .. note:: For ``ACLineSegment``-s the FROM terminal is terminal 0.</span>
+<span class="sd">            For ``PowerTransformer``-s however it is the **secondary** winding&#39;s terminal (in order to comply with the</span>
+<span class="sd">            Matpower transformer modeling assumptions)!</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">status_to</span> <span class="o">=</span> <span class="n">status_to</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            The *Branch* TO terminal status (Open or Closed), i.e. terminal&#39;s attribute ``connected``. (boolean)</span>
+
+<span class="sd">            .. note:: For ``ACLineSegment``-s the TO terminal is terminal 1.</span>
+<span class="sd">                For ``PowerTransformer``-s however it is the **primary** winding&#39;s terminal (in order to comply with the</span>
+<span class="sd">                Matpower transformer modeling assumptions)!</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id_generator</span><span class="p">)</span>
+        <span class="sd">&quot;&quot;&quot;Autogenerated ID, subsequent numbering, starting from 1, (integer)&quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="Generator"><a class="viewcode-back" href="../Topology_NodeBreaker.html#Topology_NodeBreaker.Generator">[docs]</a><span class="k">class</span> <span class="nc">Generator</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Repsenets the basic info about a ``IEC61970::Wires::SynchronousMachine`` object from the source CIM file,</span>
+<span class="sd">    not contained in the Matpower ``mpc.gen`` field.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">id_generator</span> <span class="o">=</span> <span class="n">count</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_id</span><span class="p">,</span> <span class="n">id_cim</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">fuel_type</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_id</span> <span class="o">=</span> <span class="n">node_id</span>
+        <span class="sd">&quot;&quot;&quot;A :py:attr:`Topology_NodeBreaker.Node.id`` to which the *Generator* is connected (integer)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">id_cim</span> <span class="o">=</span> <span class="n">id_cim</span>
+        <span class="sd">&quot;&quot;&quot;The unique ``mRID`` object identifier attribute (string)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="sd">&quot;&quot;&quot;The ``name`` attribute (string)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">=</span> <span class="n">mode</span>
+        <span class="sd">&quot;&quot;&quot;The ``operatingMode`` attribute (string)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="nb">type</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The prefix of the ``GeneratingUnit`` class reference (string)</span>
+
+<span class="sd">        .. warning:: Some *Generator*-s are assigned to the generic ``GeneratingUnit`` class. Then their *type* is an empty sting!</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">fuel_type</span> <span class="o">=</span> <span class="n">fuel_type</span>
+        <span class="sd">&quot;&quot;&quot;The ``FossilFuel.fossilFuelType`` attribute (string) of the ``ThermalGeneratingUnit`` CIM class&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id_generator</span><span class="p">)</span>
+        <span class="sd">&quot;&quot;&quot;Autogenerated ID, subsequent numbering, starting from 1, (integer)&quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="Load"><a class="viewcode-back" href="../Topology_NodeBreaker.html#Topology_NodeBreaker.Load">[docs]</a><span class="k">class</span> <span class="nc">Load</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Repsenets the basic info about a ``IEC61970::Wires::EnergyConsumer`` object from the source CIM file.</span>
+
+<span class="sd">    .. note:: The problem is that the Matpower mpc structure aggeregates all *Load*-s in the same bus. However if is</span>
+<span class="sd">        useful to preserve the information about them (for example for load shedding) and this is why it</span>
+<span class="sd">        is stored separately in this class.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_id</span><span class="p">,</span> <span class="n">id_cim</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">p_mw</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">q_mvar</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_id</span> <span class="o">=</span> <span class="n">node_id</span>
+        <span class="sd">&quot;&quot;&quot;A :py:attr:`Topology_NodeBreaker.Node.id`` to which the *Load* is connected (integer)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">id_cim</span> <span class="o">=</span> <span class="n">id_cim</span>
+        <span class="sd">&quot;&quot;&quot;The unique ``mRID`` object identifier attribute (string)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="sd">&quot;&quot;&quot;The ``name`` attribute (string)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">p_mw</span> <span class="o">=</span> <span class="n">p_mw</span>
+        <span class="sd">&quot;&quot;&quot;The load terminal&#39;s StateVariable ``SvPowerFlow.p`` attribute (ActivePower datatype, usually MW for TSO networks)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">q_mvar</span> <span class="o">=</span> <span class="n">q_mvar</span>
+        <span class="sd">&quot;&quot;&quot;The load terminal&#39;s StateVariable ``SvPowerFlow.q`` attribute (ReactivePower datatype, usually MVAr for TSO networks)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="n">status</span>
+        <span class="sd">&quot;&quot;&quot;The *Load* terminal&#39;s attribute ``connected`` (boolean)&quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="Shunt"><a class="viewcode-back" href="../Topology_NodeBreaker.html#Topology_NodeBreaker.Shunt">[docs]</a><span class="k">class</span> <span class="nc">Shunt</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>  <span class="c1"># cim_shunts</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Repsenets the basic info about a ``IEC61970::Wires::ShuntCompensator`` object from the source CIM file.</span>
+
+<span class="sd">    .. note:: The problem is that the Matpower mpc structure aggeregates all *Shunt*-s in the same bus. However if is</span>
+<span class="sd">        useful to preserve the information about them (for example for switching actions) and this is why it</span>
+<span class="sd">        is stored separately in this class.</span>
+
+<span class="sd">    .. warning:: ``IEC61970::Wires::SeriesCompensator`` and ``IEC61970::Wires::StaticVarCompensator`` are not yet</span>
+<span class="sd">        implemented! See the source code of :py:meth:`CIM2Matpower.CIM2Matpower._create_buses_and_gens` !</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_id</span><span class="p">,</span> <span class="n">id_cim</span><span class="p">,</span> <span class="n">maximumSections</span><span class="p">,</span> <span class="n">numActiveSections</span><span class="p">,</span> <span class="n">gPerSection_MVAr</span><span class="p">,</span> <span class="n">bPerSection_MVAr</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_id</span> <span class="o">=</span> <span class="n">node_id</span>
+        <span class="sd">&quot;&quot;&quot;A :py:attr:`Topology_NodeBreaker.Node.id`` to which the *Shunt* is connected (integer)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">id_cim</span> <span class="o">=</span> <span class="n">id_cim</span>
+        <span class="sd">&quot;&quot;&quot;The unique ``mRID`` object identifier attribute (string)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="sd">&quot;&quot;&quot;The ``name`` attribute (string)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="n">status</span>
+        <span class="sd">&quot;&quot;&quot;The *Shunt* terminal&#39;s attribute ``connected`` (boolean)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">gPerSection_MVAr</span> <span class="o">=</span> <span class="n">gPerSection_MVAr</span>
+        <span class="sd">&quot;&quot;&quot;The ``gPerSection`` attribute, transformed MW demanded at V = 1.0 p.u. as required by Matpower specifications&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">bPerSection_MVAr</span> <span class="o">=</span> <span class="n">bPerSection_MVAr</span>
+        <span class="sd">&quot;&quot;&quot;The ``bPerSection`` attribute, transformed MVAr injected at V = 1.0 p.u. as required by Matpower specifications&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">maximumSections</span> <span class="o">=</span> <span class="n">maximumSections</span>
+        <span class="sd">&quot;&quot;&quot;The ``maximumSections`` attribute (integer)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">numActiveSections</span> <span class="o">=</span> <span class="n">numActiveSections</span>
+        <span class="sd">&quot;&quot;&quot;The *Shunt*&#39;s StateVariable ``SvShuntCompensatorSections.continuousSections`` attribute, i.e. the number of switched ON sections (integer)&quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="PhaseTapChanger"><a class="viewcode-back" href="../Topology_NodeBreaker.html#Topology_NodeBreaker.PhaseTapChanger">[docs]</a><span class="k">class</span> <span class="nc">PhaseTapChanger</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Repsenets the basic info about a ``IEC61970::Wires::PhaseTapChanger`` object from the source CIM file.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">branch_id</span><span class="p">,</span> <span class="n">id_cim</span><span class="p">,</span> <span class="n">step_num_list</span><span class="p">,</span> <span class="n">x_pu_list</span><span class="p">,</span> <span class="n">angle_shift_deg_list</span><span class="p">,</span>
+                 <span class="n">continuous_position</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">branch_id</span> <span class="o">=</span> <span class="n">branch_id</span>
+        <span class="sd">&quot;&quot;&quot;A :py:attr:`Topology_BusBranch.Branch.id`` (integer)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">id_cim</span> <span class="o">=</span> <span class="n">id_cim</span>
+        <span class="sd">&quot;&quot;&quot;The unique ``mRID`` object identifier attribute (string)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">step_num_list</span> <span class="o">=</span> <span class="n">step_num_list</span>
+        <span class="sd">&quot;&quot;&quot;A list of the step numbers (list of subsequent string)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">x_pu_list</span> <span class="o">=</span> <span class="n">x_pu_list</span>
+        <span class="sd">&quot;&quot;&quot;A list of reactances [p.u.] for each corresponding step  (list of floats)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">angle_shift_deg_list</span> <span class="o">=</span> <span class="n">angle_shift_deg_list</span>
+        <span class="sd">&quot;&quot;&quot;A list of phase shifts [deg] for each corresponding step (list of floats)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">continuous_position</span> <span class="o">=</span> <span class="n">continuous_position</span>
+        <span class="sd">&quot;&quot;&quot;The *PhaseTapChanger*&#39;s StateVariable ``SvTapStep.continuousPosition`` attribute, i.e. the actual step position (integer)&quot;&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="RatioTapChanger"><a class="viewcode-back" href="../Topology_NodeBreaker.html#Topology_NodeBreaker.RatioTapChanger">[docs]</a><span class="k">class</span> <span class="nc">RatioTapChanger</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Repsenets the basic info about a ``IEC61970::Wires::RatioTapChanger`` object from the source CIM file.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">branch_id</span><span class="p">,</span> <span class="n">id_cim</span><span class="p">,</span> <span class="n">lowStep</span><span class="p">,</span> <span class="n">highStep</span><span class="p">,</span> <span class="n">neutralU_kV</span><span class="p">,</span> <span class="n">stepVoltageIncrement_kV</span><span class="p">,</span> <span class="n">continuousPosition</span><span class="p">,</span>
+                 <span class="n">hasRegulatingControl</span><span class="p">,</span> <span class="n">RC_discrete</span><span class="o">=</span><span class="p">[],</span> <span class="n">RC_mode</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">RC_targetRange_kV</span><span class="o">=</span><span class="p">[],</span> <span class="n">RC_targetValue_kV</span><span class="o">=</span><span class="p">[]):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">branch_id</span> <span class="o">=</span> <span class="n">branch_id</span>
+        <span class="sd">&quot;&quot;&quot;A :py:attr:`Topology_BusBranch.Branch.id`` (integer)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">id_cim</span> <span class="o">=</span> <span class="n">id_cim</span>
+        <span class="sd">&quot;&quot;&quot;The unique ``mRID`` object identifier attribute (string)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">lowStep</span> <span class="o">=</span> <span class="n">lowStep</span>
+        <span class="sd">&quot;&quot;&quot;The ``lowStep`` attribute (inherited from: ``TapChanger``), i.e. the low step position number (integer)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">highStep</span> <span class="o">=</span> <span class="n">highStep</span>
+        <span class="sd">&quot;&quot;&quot;The ``highStep`` attribute (inherited from: ``TapChanger``), i.e. the highest possible tap step position, advance from neutral (integer)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">neutralU_kV</span> <span class="o">=</span> <span class="n">neutralU_kV</span>
+        <span class="sd">&quot;&quot;&quot;The ``neutralU`` attribute (inherited from: ``TapChanger``), i.e. voltage at which the winding operates at the neutral tap setting (kV)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">stepVoltageIncrement_kV</span> <span class="o">=</span> <span class="n">stepVoltageIncrement_kV</span>
+        <span class="sd">&quot;&quot;&quot;The ``stepVoltageIncrement`` attribute (inherited from: ``TapChanger``), i.e. tap step voltage increment, per step position. (kV)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">continuousPosition</span> <span class="o">=</span> <span class="n">continuousPosition</span>
+        <span class="sd">&quot;&quot;&quot;The *RatioTapChanger*&#39;s StateVariable ``SvTapStep.continuousPosition`` attribute, i.e. tap step voltage increment, per step position. (integer)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">hasRegulatingControl</span> <span class="o">=</span> <span class="n">hasRegulatingControl</span>
+        <span class="sd">&quot;&quot;&quot;The *RatioTapChanger*&#39;s ``RegulatingControl`` reference, false if unavailable (boolean)&quot;&quot;&quot;</span>
+
+        <span class="c1"># RC stands for RegulatingControl</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">RC_discrete</span> <span class="o">=</span> <span class="n">RC_discrete</span>
+        <span class="sd">&quot;&quot;&quot;The ``RegulatingControl``&#39;s ``discrete`` attribute (integer)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">RC_mode</span> <span class="o">=</span> <span class="n">RC_mode</span>
+        <span class="sd">&quot;&quot;&quot;The ``RegulatingControl``&#39;s ``mode`` attribute (string)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">RC_targetRange_kV</span> <span class="o">=</span> <span class="n">RC_targetRange_kV</span>
+        <span class="sd">&quot;&quot;&quot;The ``RegulatingControl``&#39;s ``targetRange`` attribute (kV)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">RC_targetValue_kV</span> <span class="o">=</span> <span class="n">RC_targetValue_kV</span>
+        <span class="sd">&quot;&quot;&quot;The ``RegulatingControl``&#39;s ``targetValue`` attribute (kV)&quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="Topology_NodeBreaker"><a class="viewcode-back" href="../Topology_NodeBreaker.html#Topology_NodeBreaker.Topology_NodeBreaker">[docs]</a><span class="k">class</span> <span class="nc">Topology_NodeBreaker</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Additional data from the CIM files about the NodeBreaker topology of the system&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">CIM_filenames</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">CIM_filenames</span> <span class="o">=</span> <span class="n">CIM_filenames</span>
+        <span class="sd">&quot;&quot;&quot;List of the CIM files which were passed to :py:meth:`CIM2Matpower.import` (list if string)&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="sd">&quot;&quot;&quot;List of :py:class:`~Node`-s within the biggest ``TopologicalIsland`` of the imported power system.&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">substations</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="sd">&quot;&quot;&quot;List of :py:class:`Topology_NodeBreaker.Substation`-s within the biggest ``TopologicalIsland`` of the imported power system.&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">areas</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="sd">&quot;&quot;&quot;List of all :py:class:`~Area`-s within the imported CIM files.&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">zones</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="sd">&quot;&quot;&quot;List of all :py:class:`Topology_NodeBreaker.Zone`-s within the imported CIM files.&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">switches</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="sd">&quot;&quot;&quot;List of all :py:class:`Topology_NodeBreaker.Switch`-es within the biggest ``TopologicalIsland`` of the imported power system.&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">branches</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="sd">&quot;&quot;&quot;List of all :py:class:`Topology_NodeBreaker.Branch`-es within the biggest ``TopologicalIsland`` of the imported power system.&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">generators</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="sd">&quot;&quot;&quot;List of all :py:class:`Topology_NodeBreaker.Generator`-es within the biggest ``TopologicalIsland`` of the imported power system.&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">loads</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="sd">&quot;&quot;&quot;List of all :py:class:`Topology_NodeBreaker.Load`-es within the biggest ``TopologicalIsland`` of the imported power system.&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">shunts</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="sd">&quot;&quot;&quot;List of all :py:class:`Topology_NodeBreaker.Shunt`-es within the biggest ``TopologicalIsland`` of the imported power system.&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">phasetapchangers</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="sd">&quot;&quot;&quot;List of all :py:class:`Topology_NodeBreaker.PhaseTapChanger`-s within the biggest ``TopologicalIsland`` of the imported power system.&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ratiotapchangers</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="sd">&quot;&quot;&quot;List of all :py:class:`Topology_NodeBreaker.RatioTapChanger`-s within the biggest ``TopologicalIsland`` of the imported power system.&quot;&quot;&quot;</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CIM2Matpower 160513 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, Konstantin Gerasimov.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
+    </div>
+  </body>
+</html>
