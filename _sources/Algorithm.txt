@@ -1,0 +1,6 @@
+Algorithm
+=======================================
+
+The CIM import is intended to happen from the Matlab function cim_read(). The algorithm is presented as blocks of code snippets. The green frame indicates calling in Python, and the red - calling in Matlab.
+
+.. image:: /images/Algorithm.*
