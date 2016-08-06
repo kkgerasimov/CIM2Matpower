@@ -3,13 +3,13 @@
 
 <p>Thе CIM2Matpower package is created for KU-Leuven as part of the GARPUR project http://www.garpur-project.eu</p>
 
-<p><b>Requirements:</b></p>
+<p><b>Requirements:</b><br>
 <ol>
 <li>Python 2.7</li>
 <li>PyCIM package - the latest reporitory is available at https://github.com/rwl/PyCIM (last changed on 20 May 2016)</li>
-</ol>
+</ol></p>
 
-<p><b>Note:</b></p>The CIM2Matpower Python package was developed by using parts of the code of the Cim2BusBranch package, available at https://pypi.python.org/pypi/Cim2BusBranch/0.1
+<p><b>Note:</b><br>The CIM2Matpower Python package was developed by using parts of the code of the Cim2BusBranch package, available at https://pypi.python.org/pypi/Cim2BusBranch/0.1</p>
 
 
 <p><b>Special thanks to:</b></p>
