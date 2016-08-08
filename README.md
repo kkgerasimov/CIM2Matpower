@@ -9,7 +9,7 @@
 <li>PyCIM package - the latest reporitory is available at https://github.com/rwl/PyCIM (last changed on 20 May 2016)</li>
 </ol>
 
-<p><b>Note:</b><br>The CIM2Matpower Python package was developed by using parts of the code of the Cim2BusBranch package, available at https://pypi.python.org/pypi/Cim2BusBranch/0.1</p>
+<p><b>Note:</b><br>The CIM2Matpower Python package was developed by using parts of the code of the Cim2BusBranch package, available at https://bitbucket.org/sscherfke/cim2busbranch (or also at https://pypi.python.org/pypi/Cim2BusBranch/0.1)</p>
 
 
 <p><b>Special thanks to:</b></p>
