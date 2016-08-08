@@ -1,7 +1,7 @@
 # CIM2Matpower
 <p>Python package which is meant to be executed from a Matlab script in order to transform a CIMv14 ENTSO-E profile transmission system network model to a Matpower case structure. For more information see the documentation at:  https://kkgerasimov.github.io/CIM2Matpower/ </p>
 
-<p>Thе CIM2Matpower package is created for KU-Leuven as part of the GARPUR project http://www.garpur-project.eu</p>
+<p>Thе CIM2Matpower package is created for <a href="https://www.esat.kuleuven.be/electa">KU-Leuven</a> as part of the GARPUR project http://www.garpur-project.eu</p>
 
 <p><b>Requirements:</b></p>
 <ol>
