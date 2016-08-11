@@ -227,10 +227,14 @@ mpc_bb.gen = imported_CIM.gen;
 % the fields are reordered explicitly with the "orderfields" function.
 mpc_bb.NodeBreaker_topology.CIM_filenames = imported_CIM.NodeBreaker_topology.CIM_filenames;
 
-areas = cellfun(@(elem) elem, imported_CIM.NodeBreaker_topology.areas);
-[~,order] = sort([areas.id]);
-mpc_bb.NodeBreaker_topology.Areas = orderfields(areas(order),{'id', 'name', 'id_cim', 'pTolerance', 'netInterchange'});
-clear areas
+if iscell(imported_CIM.NodeBreaker_topology.areas)
+    areas = cellfun(@(elem) elem, imported_CIM.NodeBreaker_topology.areas);
+    [~,order] = sort([areas.id]);
+    mpc_bb.NodeBreaker_topology.Areas = orderfields(areas(order),{'id', 'name', 'id_cim', 'pTolerance', 'netInterchange'});
+    clear areas
+else
+    mpc_bb.NodeBreaker_topology.Areas = [];
+end
 
 % mpc_bb.NodeBreaker_topology.Branches are not sorted in order to correspond to the mpc_bb.branch
 % (the problem is that unlike mpc.bus, mpc.branch do not have explicitly id)
@@ -252,31 +256,55 @@ nodes = cellfun(@(elem) elem, imported_CIM.NodeBreaker_topology.nodes);
 mpc_bb.NodeBreaker_topology.Nodes = orderfields(nodes(order),{'id', 'bus_id', 'desc', 'name', 'id_cim'});
 clear nodes
 
-mpc_bb.NodeBreaker_topology.PhaseTapChangers = orderfields(cellfun(@(elem) elem, imported_CIM.NodeBreaker_topology.phasetapchangers),...
-    {'branch_id', 'id_cim', 'step_num_list', 'angle_shift_deg_list', 'x_pu_list', 'continuous_position'});
+if iscell(imported_CIM.NodeBreaker_topology.phasetapchangers)
+    mpc_bb.NodeBreaker_topology.PhaseTapChangers = orderfields(cellfun(@(elem) elem, imported_CIM.NodeBreaker_topology.phasetapchangers),...
+        {'branch_id', 'id_cim', 'step_num_list', 'angle_shift_deg_list', 'x_pu_list', 'continuous_position'});
+else
+    mpc_bb.NodeBreaker_topology.PhaseTapChangers = [];
+end
 
-mpc_bb.NodeBreaker_topology.RatioTapChangers = orderfields(cellfun(@(elem) elem, imported_CIM.NodeBreaker_topology.ratiotapchangers),...
-    {'branch_id', 'id_cim', 'lowStep', 'highStep', 'neutralU_kV', 'stepVoltageIncrement_kV', 'continuousPosition'...
-    'hasRegulatingControl', 'RC_discrete', 'RC_mode', 'RC_targetRange_kV', 'RC_targetValue_kV'});
+if iscell(imported_CIM.NodeBreaker_topology.ratiotapchangers)
+    mpc_bb.NodeBreaker_topology.RatioTapChangers = orderfields(cellfun(@(elem) elem, imported_CIM.NodeBreaker_topology.ratiotapchangers),...
+        {'branch_id', 'id_cim', 'lowStep', 'highStep', 'neutralU_kV', 'stepVoltageIncrement_kV', 'continuousPosition'...
+        'hasRegulatingControl', 'RC_discrete', 'RC_mode', 'RC_targetRange_kV', 'RC_targetValue_kV'});
+else
+    mpc_bb.NodeBreaker_topology.RatioTapChangers = [];
+end
 
-shunts = cellfun(@(elem) elem, imported_CIM.NodeBreaker_topology.shunts);
-[~,order] = sort([shunts.node_id]);
-mpc_bb.NodeBreaker_topology.Shunts = orderfields(shunts(order),...
-    {'node_id', 'name', 'id_cim', 'status', 'bPerSection_MVAr', 'gPerSection_MVAr', 'maximumSections', 'numActiveSections'});
-clear shunts
+if iscell(imported_CIM.NodeBreaker_topology.shunts)
+    shunts = cellfun(@(elem) elem, imported_CIM.NodeBreaker_topology.shunts);
+    [~,order] = sort([shunts.node_id]);
+    mpc_bb.NodeBreaker_topology.Shunts = orderfields(shunts(order),...
+        {'node_id', 'name', 'id_cim', 'status', 'bPerSection_MVAr', 'gPerSection_MVAr', 'maximumSections', 'numActiveSections'});
+    clear shunts
+else
+    mpc_bb.NodeBreaker_topology.Shunts = [];
+end
 
-substations = cellfun(@(elem) elem, imported_CIM.NodeBreaker_topology.substations);
-[~,order] = sort({substations.name});
-mpc_bb.NodeBreaker_topology.Substations = orderfields(substations(order),{'name', 'node_id_list', 'id_cim'});
-clear substations
+if iscell(imported_CIM.NodeBreaker_topology.substations)
+    substations = cellfun(@(elem) elem, imported_CIM.NodeBreaker_topology.substations);
+    [~,order] = sort({substations.name});
+    mpc_bb.NodeBreaker_topology.Substations = orderfields(substations(order),{'name', 'node_id_list', 'id_cim'});
+    clear substations
+else
+    mpc_bb.NodeBreaker_topology.Substations = [];
+end
 
-mpc_bb.NodeBreaker_topology.Switches = orderfields(cellfun(@(elem) elem, imported_CIM.NodeBreaker_topology.switches),...
-    {'node_from_id', 'node_to_id', 'name', 'id_cim', 'branch_id', 'status'});
+if iscell(imported_CIM.NodeBreaker_topology.switches)
+    mpc_bb.NodeBreaker_topology.Switches = orderfields(cellfun(@(elem) elem, imported_CIM.NodeBreaker_topology.switches),...
+        {'node_from_id', 'node_to_id', 'name', 'id_cim', 'branch_id', 'status'});
+else
+    mpc_bb.NodeBreaker_topology.Switches = [];
+end
 
-zones = cellfun(@(elem) elem, imported_CIM.NodeBreaker_topology.zones);
-[~,order] = sort([zones.id]);
-mpc_bb.NodeBreaker_topology.Zones = orderfields(zones(order),{'id', 'name', 'id_cim'});
-clear zones
+if iscell(imported_CIM.NodeBreaker_topology.zones)
+    zones = cellfun(@(elem) elem, imported_CIM.NodeBreaker_topology.zones);
+    [~,order] = sort([zones.id]);
+    mpc_bb.NodeBreaker_topology.Zones = orderfields(zones(order),{'id', 'name', 'id_cim'});
+    clear zones
+else
+    mpc_bb.NodeBreaker_topology.Zones = [];
+end
 
 % raise flag that the topology is BusBranch
 mpc_bb.NodeBreaker_topology.is_mpc_NodeBreaker = false;
